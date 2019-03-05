@@ -30,7 +30,6 @@ public class Projectile extends Item {
     private double xSpeed;
     private double ySpeed;
     private double speed;
-    private int bounceTimer;
     
     public Projectile(int x, int y, int width, int height, Game game) {
         super(x, y);
@@ -44,7 +43,7 @@ public class Projectile extends Item {
         this.xSpeed = 0;
         this.ySpeed = -8;
         this.hitbox = new Rectangle(x, y, width, height);  
-        //this.anim = new Animation(Assets.destroyEffect, 100);
+        this.anim = new Animation(Assets.grenade, 100);
     }
     
      
@@ -122,7 +121,7 @@ public class Projectile extends Item {
             }
         }
         else if (getState() == ballStatus.base) { 
-            // Check if ball falls
+            anim.tick();
             // player loses if ball falls
             if (getY() + getHeight() >= game.getHeight()) {
               setState(ballStatus.fallen);
@@ -168,6 +167,6 @@ public class Projectile extends Item {
     
     @Override
     public void render(Graphics g) {
-       g.drawImage(Assets.temp, getX(), getY(), getWidth(), getHeight(), null);
+       g.drawImage(anim.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
     }
 }
