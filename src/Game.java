@@ -24,7 +24,11 @@ public class Game implements Runnable {
     private Thread thread; //thread to create the game
     private boolean running; //to set the game
     private Player player; // to use a player
+    private Projectile ball;
     private KeyManager keyManager; // to manage the keyboard
+    private enum gameState { normal, gameOver }
+    private gameState gameState;
+
     
     /**
      * to create title, width and height and set the game is still not running
@@ -38,6 +42,8 @@ public class Game implements Runnable {
         this.height = height;
         running = false;
         keyManager = new KeyManager();
+        this.gameState = gameState.normal;
+
     }
 
     public int getWidth() {
@@ -47,14 +53,34 @@ public class Game implements Runnable {
     public int getHeight() {
         return height;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
     
+    public Projectile getBall() {
+        return ball;
+    }
+
+    public gameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(gameState gameState) {
+        this.gameState = gameState;
+    }
+        
     /**
      * initializing the display window of the game
      */
     private void init() {
         display = new Display(title, width, height);
         Assets.init();
-        player = new Player(0, getHeight() - 100, 1, 100, 100, this);
+
+        player = new Player(getWidth()/2 - 113, getHeight() - 75, 1, 226, 50, this);
+        ball = new Projectile(player.getX() + player.getWidth()/2 - 25, player.getY() - 51, 50, 50, this);
+
+
         display.getJframe().addKeyListener(keyManager);
     }
     
@@ -95,8 +121,22 @@ public class Game implements Runnable {
     
     private void tick() {
         keyManager.tick();
-        // advancing player with collision
-        player.tick();
+        if (getGameState() == gameState.normal) {            
+            if (getPlayer().getState() == Player.playerState.dead) {
+                setGameState(gameState.gameOver);
+            }
+            // advancing player with collision
+            player.tick();
+            ball.tick();
+        }
+        if (getGameState() == gameState.gameOver) {
+            if (keyManager.enter) {
+                setGameState(gameState.normal);
+                keyManager.setStart(false);
+                player = new Player(getWidth()/2 - 113, getHeight() - 75, 1, 226, 50, this);
+                ball = new Projectile(player.getX() + player.getWidth()/2 - 25, player.getY() - 51, 50, 50, this);
+            }
+        }
     }
     
     private void render() {
@@ -113,8 +153,14 @@ public class Game implements Runnable {
         }
         else {
             g = bs.getDrawGraphics();
-            g.drawImage(Assets.background, 0, 0, width, height, null);
-            player.render(g);
+            if (getGameState() == gameState.normal) {
+                g.drawImage(Assets.background, 0, 0, width, height, null);
+                player.render(g);
+                ball.render(g);
+            }
+            if (getGameState() == gameState.gameOver) {
+                g.drawImage(Assets.gameOver, 0, 0, getWidth(), getHeight(), null);
+            }
             bs.show();
             g.dispose();
         }

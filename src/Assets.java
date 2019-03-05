@@ -16,11 +16,11 @@ public class Assets {
     public static BufferedImage background; // to store background image
     public static BufferedImage player; // to store the player image
     public static BufferedImage sprites; // to store the sprites
-    public static BufferedImage playerUp[]; // pictures to go up
-    public static BufferedImage playerDown[]; // pictures to go down
-    public static BufferedImage playerLeft[]; // pictures to go left
-    public static BufferedImage playerRight[]; // pictures to go right
-    
+    public static BufferedImage playerBar[]; // pictures to go up
+    public static BufferedImage destroyEffect[]; // picture for being destroyed
+    public static BufferedImage drug;
+    public static BufferedImage temp;
+    public static BufferedImage gameOver; // to store game over image
     
     /**
      * initializing the images of the game
@@ -28,20 +28,22 @@ public class Assets {
     public static void init() {
         background = ImageLoader.loadImage("/images/Background.jpg");
         player = ImageLoader.loadImage("/images/slime.png");
+        temp = ImageLoader.loadImage("/images/ball.png");
+        gameOver = ImageLoader.loadImage("/images/gameoverscreen.jpg");
         
-        sprites = ImageLoader.loadImage("/images/mariosprites.png");
+        sprites = ImageLoader.loadImage("/images/BarritaSprite.png");
         SpreadSheet spritesheet = new SpreadSheet(sprites);
         
-        playerUp = new BufferedImage[8];
-        playerLeft = new BufferedImage[8];
-        playerDown = new BufferedImage[8];
-        playerRight = new BufferedImage[8];
+        playerBar = new BufferedImage[18];
+        
+        destroyEffect = new BufferedImage[4];
         // cropping the pictures from the sheet into the array
-        for (int i = 0; i < 8; i++) {
-            playerUp[i] = spritesheet.crop(i * 20, 0, 20, 32);
-            playerLeft[i] = spritesheet.crop(i * 20, 32, 20, 32);
-            playerRight[i] = spritesheet.crop(i * 20, 64, 20, 32);
-            playerDown[i] = spritesheet.crop(i * 20, 96, 20, 32);            
+        int count = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 6; j++) {
+                playerBar[count] = spritesheet.crop(i * 226, j * 50, 226, 50);
+                count++;
+            }
         }
     }
 }

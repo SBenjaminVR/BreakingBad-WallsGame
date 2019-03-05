@@ -1,5 +1,6 @@
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,17 +14,15 @@ import java.awt.Graphics;
  */
 
 public class Player extends Item {
-    // 32 x 20
     private int direction;
     private int width;
     private int height;
     private Game game;
     private int speed;
-    private boolean Chocado;
-    private Animation animationUp; // to store the animation for going up
-    private Animation animationLeft; // to store the animation for going left
-    private Animation animationRight; // to store the animation for going right
-    private Animation animationDown; // to store the animation for going down
+    private Rectangle hitbox;
+    private Animation bar; // to store the animation for going up
+    public enum playerState { init, alive, dead }
+    private playerState state;
     
     public Player(int x, int y, int direction, int width, int height, Game game) {
         super(x, y);
@@ -31,17 +30,10 @@ public class Player extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        this.speed = 5;
-        this.Chocado = false;
-        
-        this.animationUp = new Animation(Assets.playerUp, 100);
-        this.animationLeft = new Animation(Assets.playerLeft, 100);
-        this.animationDown = new Animation(Assets.playerDown, 100);
-        this.animationRight = new Animation(Assets.playerRight, 100);
-    }
-    
-     public int getDirection() {
-        return direction;
+        this.speed = 10;
+        this.hitbox = new Rectangle(x, y, width, height/3);
+        this.bar = new Animation(Assets.playerBar, 100);
+        this.state = playerState.init;
     }
      
     public int getWidth() {
@@ -71,54 +63,59 @@ public class Player extends Item {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-
-    public boolean isChocado() {
-        return Chocado;
+    public Rectangle getHitbox() {
+        return hitbox;
     }
 
-    public void setChocado(boolean Chocado) {
-        this.Chocado = Chocado;
+    public playerState getState() {
+        return state;
     }
+
+    public void setState(playerState state) {
+        this.state = state;
+    }
+    
+    
     
     @Override
     public void tick() {
-        this.animationRight.tick();
         
-        // moving player depending on flags
-        if (game.getKeyManager().up) {
-            setY(getY() - getSpeed());
+        if (state == playerState.init && game.getKeyManager().isStart()) {
+            // Start the game
+            state = playerState.alive;            
         }
-        if (game.getKeyManager().down) {
-            setY(getY() + getSpeed());
-        }
-        if (game.getKeyManager().left) {
-            setX(getX() - getSpeed());
-        }
-        if (game.getKeyManager().right) {
-            setX(getX() + getSpeed());
-        }
-        
-        // reset x position and y position if collision
-        if (getX() + 60 >= game.getWidth()) {
-            setChocado(true);
-            setX(game.getWidth() - 60);
-        }
-        else if (getX() <= -30) {
-            setChocado(true);
-            setX(-30);
-        }
-        if (getY() + 80 >= game.getHeight()) {
-            setChocado(true);
-            setY(game.getHeight() - 80);
-        }
-        else if (getY() <= -20) {
-            setChocado(true);
-            setY(-20);
-        }
+        // Normal game stuff
+        if (state == playerState.alive) {
+            // refresh animation
+            bar.tick();
+            // refresh hitbox location
+            hitbox.setLocation(getX(), getY());
+            
+            // Move the bar based on input
+            if (game.getKeyManager().left) {
+                setX(getX() - getSpeed());
+            }
+            if (game.getKeyManager().right) {
+                setX(getX() + getSpeed());
+            }
+            
+            // Collision with walls
+            if (getX() + getWidth() >= game.getWidth()) {
+                setX(game.getWidth() - getWidth());
+            }
+            if (getX() <= 0) {
+                setX(0);
+            }
+            if (game.getBall().getState() == Projectile.ballStatus.fallen) {
+                setState(playerState.dead);
+            }
+        }       
     }
     
     @Override
     public void render(Graphics g) {
-       g.drawImage(animationRight.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
+       g.drawImage(bar.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
+       g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+
     }
 }
