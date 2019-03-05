@@ -18,6 +18,7 @@ public class Assets {
     public static BufferedImage playerBar[]; // pictures to go up
     public static BufferedImage destroyEffect[]; // picture for being destroyed
     public static BufferedImage drug;
+    public static BufferedImage damagedBrick;  
     public static BufferedImage grenadeSprites;
     public static BufferedImage grenade[];
     public static BufferedImage gameOver; // to store game over image
@@ -28,7 +29,8 @@ public class Assets {
     public static void init() {
         background = ImageLoader.loadImage("/images/Background.jpg");
         gameOver = ImageLoader.loadImage("/images/gameoverscreen.jpg");
-        drug = ImageLoader.loadImage("/images/methSprite.png");
+        drug = ImageLoader.loadImage("/images/methSprite.png"); 
+        damagedBrick = ImageLoader.loadImage("/images/methSprite.png"); 
         
         barSprites = ImageLoader.loadImage("/images/BarritaSprite.png");
         SpreadSheet barSpritesheet = new SpreadSheet(barSprites);

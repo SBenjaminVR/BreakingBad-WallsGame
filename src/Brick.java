@@ -29,7 +29,7 @@ public class Brick extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        this.hitbox = new Rectangle(x, y, width, height);
+        this.hitbox = new Rectangle(x, y+8, width-13, height-8);
         this.destroyEffect = new Animation(Assets.destroyEffect, 100);
         this.state = status.normal;
         this.lives = 2;
@@ -60,21 +60,29 @@ public class Brick extends Item {
         this.state = state;
     }
     
+    
     @Override
     public void tick() {
         if (game.getBall().getHitbox().intersects(hitbox)) {
             setState(status.hit);
+            
         }
-        
+        /*
         if (getState() == status.hit) {
             this.destroyEffect.tick();
             
         }
+*/
         
     }
     
     @Override
     public void render(Graphics g) {
-       g.drawImage(Assets.drug, getX(), getY(), getWidth(), getHeight(), null);
+       if (getState() == status.normal) {
+        g.drawImage(Assets.drug, getX(), getY(), getWidth(), getHeight(), null);
+       }
+       if (getState() == status.hit) {
+        g.drawImage(Assets.damagedBrick, getX(), getY(), getWidth(), getHeight(), null);
+       }
     }
 }
