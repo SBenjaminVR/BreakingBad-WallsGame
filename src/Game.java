@@ -81,10 +81,12 @@ public class Game implements Runnable {
         player = new Player(getWidth()/2 - 113, getHeight() - 75, 1, 226, 50, this);
         ball = new Projectile(player.getX() + player.getWidth()/2 - 25, player.getY() - 51, 50, 50, this);
 
-        for (int i = 1; i < 6; i++) {
-            int iPosX = i*141; 
-            int iPosY = 50;
-            bricks.add(new Brick(iPosX, iPosY, 155, 55, this));
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 9; j++) {
+                int iPosX = j*141; 
+                int iPosY = 158 - i*47;
+                bricks.add(new Brick(iPosX, iPosY, 155, 55, this));
+            }
         }
 
         display.getJframe().addKeyListener(keyManager);

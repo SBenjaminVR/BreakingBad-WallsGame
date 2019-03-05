@@ -22,6 +22,7 @@ public class Brick extends Item {
     private Animation destroyEffect; // to store the animation for being destroyed
     private enum status { normal, hit }
     private status state;
+    private int lives;
     
     public Brick(int x, int y, int width, int height, Game game) {
         super(x, y);
@@ -30,7 +31,8 @@ public class Brick extends Item {
         this.game = game;
         this.hitbox = new Rectangle(x, y, width, height);
         this.destroyEffect = new Animation(Assets.destroyEffect, 100);
-        state = status.normal;
+        this.state = status.normal;
+        this.lives = 2;
     }
     
      
