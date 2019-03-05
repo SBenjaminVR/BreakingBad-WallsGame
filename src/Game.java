@@ -1,7 +1,7 @@
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.LinkedList;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -24,6 +24,7 @@ public class Game implements Runnable {
     private Thread thread; //thread to create the game
     private boolean running; //to set the game
     private Player player; // to use a player
+    private LinkedList<Brick> bricks ;// to use the bricks 
     private Projectile ball;
     private KeyManager keyManager; // to manage the keyboard
     private enum gameState { normal, gameOver }
@@ -43,6 +44,7 @@ public class Game implements Runnable {
         running = false;
         keyManager = new KeyManager();
         this.gameState = gameState.normal;
+        bricks = new LinkedList<Brick>();
 
     }
 
@@ -76,10 +78,14 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, width, height);
         Assets.init();
-
         player = new Player(getWidth()/2 - 113, getHeight() - 75, 1, 226, 50, this);
         ball = new Projectile(player.getX() + player.getWidth()/2 - 25, player.getY() - 51, 50, 50, this);
 
+        for (int i = 1; i < 6; i++) {
+            int iPosX = i*141; 
+            int iPosY = 50;
+            bricks.add(new Brick(iPosX, iPosY, 155, 55, this));
+        }
 
         display.getJframe().addKeyListener(keyManager);
     }
@@ -157,6 +163,10 @@ public class Game implements Runnable {
                 g.drawImage(Assets.background, 0, 0, width, height, null);
                 player.render(g);
                 ball.render(g);
+                for (int i = 0; i < bricks.size(); i++) {
+                    Brick myBrick = bricks.get(i);
+                    myBrick.render(g);
+                }
             }
             if (getGameState() == gameState.gameOver) {
                 g.drawImage(Assets.gameOver, 0, 0, getWidth(), getHeight(), null);

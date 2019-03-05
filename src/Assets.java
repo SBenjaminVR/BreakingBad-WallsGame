@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
  */
 public class Assets {
     public static BufferedImage background; // to store background image
-    public static BufferedImage player; // to store the player image
     public static BufferedImage barSprites; // to store the sprites
     public static BufferedImage playerBar[]; // pictures to go up
     public static BufferedImage destroyEffect[]; // picture for being destroyed
@@ -28,8 +27,8 @@ public class Assets {
      */
     public static void init() {
         background = ImageLoader.loadImage("/images/Background.jpg");
-        player = ImageLoader.loadImage("/images/slime.png");
         gameOver = ImageLoader.loadImage("/images/gameoverscreen.jpg");
+        drug = ImageLoader.loadImage("/images/methSprite.png");
         
         barSprites = ImageLoader.loadImage("/images/BarritaSprite.png");
         SpreadSheet barSpritesheet = new SpreadSheet(barSprites);
