@@ -20,6 +20,8 @@ public class KeyManager implements KeyListener {
     
     private boolean keys[]; // to store the flags for every key
     private boolean start;
+
+    
     public KeyManager() {
         keys = new boolean[256];
     }
@@ -51,7 +53,6 @@ public class KeyManager implements KeyListener {
     public void setStart(boolean start) {
         this.start = start;
     }
-    
     
     /**
      * to enable or disable moves on every tick

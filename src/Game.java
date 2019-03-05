@@ -28,6 +28,7 @@ public class Game implements Runnable {
     private KeyManager keyManager; // to manage the keyboard
     private enum gameState { normal, gameOver }
     private gameState gameState;
+
     
     /**
      * to create title, width and height and set the game is still not running
@@ -42,6 +43,7 @@ public class Game implements Runnable {
         running = false;
         keyManager = new KeyManager();
         this.gameState = gameState.normal;
+
     }
 
     public int getWidth() {
@@ -74,8 +76,11 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, width, height);
         Assets.init();
+
         player = new Player(getWidth()/2 - 113, getHeight() - 75, 1, 226, 50, this);
         ball = new Projectile(player.getX() + player.getWidth()/2 - 25, player.getY() - 51, 50, 50, this);
+
+
         display.getJframe().addKeyListener(keyManager);
     }
     

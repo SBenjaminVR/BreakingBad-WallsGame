@@ -63,7 +63,6 @@ public class Player extends Item {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-
     public Rectangle getHitbox() {
         return hitbox;
     }
@@ -111,12 +110,12 @@ public class Player extends Item {
                 setState(playerState.dead);
             }
         }       
-            
     }
     
     @Override
     public void render(Graphics g) {
        g.drawImage(bar.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
        g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+
     }
 }
