@@ -21,7 +21,7 @@ public class powerUp extends Item {
     private Game game;
     private Rectangle xHitbox;
     private Rectangle yHitbox;
-    private Animation destroyEffect; // to store the animation for being destroyed
+    private Animation powerAnimation; // to store the animation for being destroyed
     public enum status { normal, hit, destroyed }
     private status state;
     private int lives;
@@ -35,7 +35,7 @@ public class powerUp extends Item {
         this.game = game;
         this.xHitbox = new Rectangle(x, y+15, width-13, height-20);
         this.yHitbox = new Rectangle(x + 10, y+8, width-28, height-8);
-        this.destroyEffect = new Animation(Assets.destroyEffect, 100);
+        this.powerAnimation = new Animation(Assets.powerAnimation, 100);
         this.state = status.normal;
         this.lives = 2;
         this.bTimer = 0;
@@ -84,8 +84,8 @@ public class powerUp extends Item {
     @Override
     public void tick() {
         if (getState() == status.destroyed) {
-            destroyEffect.tick();
-            if (destroyEffect.getIndex() == 5) {
+            powerAnimation.tick();
+            if (powerAnimation.getIndex() == 5) {
                 animOver = true;
             }
         }
@@ -94,13 +94,13 @@ public class powerUp extends Item {
     @Override
     public void render(Graphics g) {
        if (getState() == status.normal) {
-            g.drawImage(Assets.drug, getX(), getY(), getWidth(), getHeight(), null);
+            g.drawImage(Assets.powerUp, getX(), getY(), getWidth(), getHeight(), null);
        }
        if (getState() == status.hit) {
-            g.drawImage(Assets.damagedBrick, getX(), getY(), getWidth(), getHeight(), null);
+            g.drawImage(Assets.damagedPowerUp, getX(), getY(), getWidth(), getHeight(), null);
        }
        if (getState() == status.destroyed) {
-           g.drawImage(destroyEffect.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
+           g.drawImage(powerAnimation.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
        }
        
     }
