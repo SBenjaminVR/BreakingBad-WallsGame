@@ -235,26 +235,18 @@ public class Game implements Runnable {
             for(int j = 0; j < bricks.size(); j++){
                 Brick myBrick = bricks.get(j);
 
-                boolean yIntersects = ball.getHitbox().intersects(myBrick.getyHitbox());
-                boolean xIntersects = ball.getHitbox().intersects(myBrick.getxHitbox());
+                boolean Intersects = ball.intersecta(myBrick);
+//                boolean xIntersects = ball.getHitbox().intersects(myBrick.getxHitbox());
 
-                if(yIntersects && brickTimer <= 0){
+                if(Intersects && brickTimer <= 0){
 //                        player.setScore(player.getScore() + 5);
                     if (myBrick.getState() == Brick.status.normal) myBrick.setState(Brick.status.hit);
                     else if (myBrick.getState() == Brick.status.hit) myBrick.setState(Brick.status.destroyed);
-                    yIntersects = false;
+                    Intersects = false;
 
                     brickTimer = 10;
 
                     ball.setYSpeed(ball.getYSpeed() * -1);
-                }
-                else if (xIntersects && brickTimer <= 0){
-//                        player.setScore(player.getScore() + 5);
-                    if (myBrick.getState() == Brick.status.normal) myBrick.setState(Brick.status.hit);
-                    else if (myBrick.getState() == Brick.status.hit) myBrick.setState(Brick.status.destroyed);
-                    xIntersects = false;
-                    myBrick.setbTimer(10);
-                    brickTimer = 10;
                     ball.setXSpeed(ball.getXSpeed() * -1);
                 }
                 

@@ -112,6 +112,8 @@ public class Player extends Item {
         }       
     }
     
+    
+    
     @Override
     public void render(Graphics g) {
        g.drawImage(bar.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);

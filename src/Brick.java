@@ -19,8 +19,6 @@ public class Brick extends Item {
     private int width;
     private int height;
     private Game game;
-    private Rectangle xHitbox;
-    private Rectangle yHitbox;
     private Animation destroyEffect; // to store the animation for being destroyed
     public enum status { normal, hit, destroyed }
     private status state;
@@ -37,8 +35,6 @@ public class Brick extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        this.xHitbox = new Rectangle(x, y+15, width-13, height-25);
-        this.yHitbox = new Rectangle(x + 10, y+8, width-28, height-8);
         this.destroyEffect = new Animation(Assets.destroyEffect, 100);
         this.state = status.normal;
         this.lives = 2;
@@ -74,14 +70,6 @@ public class Brick extends Item {
         this.state = state;
     } 
 
-    public Rectangle getxHitbox() {
-        return xHitbox;
-    }
-
-    public Rectangle getyHitbox() {
-        return yHitbox;
-    }
-
     public boolean isAnimOver() {
         return animOver;
     }
@@ -115,6 +103,11 @@ public class Brick extends Item {
             }
         }
     }
+    
+    public Rectangle getPerimetro() {
+
+            return new Rectangle(getX(), getY(), getWidth(), getHeight());
+        }
     
     @Override
     public void render(Graphics g) {

@@ -3,6 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
+            <file>file:/C:/Users/Hglez/Documents/NetBeansProjects/Tarea4/src/Game.java</file>
+            <file>file:/C:/Users/Hglez/Documents/NetBeansProjects/Tarea4/src/Animation.java</file>
+            <file>file:/C:/Users/Hglez/Documents/NetBeansProjects/Tarea4/src/KeyManager.java</file>
+            <file>file:/C:/Users/Hglez/Documents/NetBeansProjects/Tarea4/src/Player.java</file>
+            <file>file:/C:/Users/Hglez/Documents/NetBeansProjects/Tarea4/src/VideoGame.java</file>
+            <file>file:/C:/Users/Hglez/Documents/NetBeansProjects/Tarea4/src/Brick.java</file>
+            <file>file:/C:/Users/Hglez/Documents/NetBeansProjects/Tarea4/src/powerUp.java</file>
+            <file>file:/C:/Users/Hglez/Documents/NetBeansProjects/Tarea4/src/Assets.java</file>
+            <file>file:/C:/Users/Hglez/Documents/NetBeansProjects/Tarea4/src/Projectile.java</file>
+            <file>file:/C:/Users/Hglez/Documents/NetBeansProjects/Tarea4/src/SoundClip.java</file>
+=======
             <file>file:/C:/Users/Benjamin/Documents/NetBeansProjects/Video%20Game/src/ImageLoader.java</file>
             <file>file:/C:/Users/Benjamin/Documents/NetBeansProjects/Video%20Game/src/Assets.java</file>
             <file>file:/C:/Users/Benjamin/Documents/NetBeansProjects/Video%20Game/src/WriteFile.java</file>
@@ -12,6 +24,7 @@
             <file>file:/C:/Users/Benjamin/Documents/NetBeansProjects/Video%20Game/src/KeyManager.java</file>
             <file>file:/C:/Users/Benjamin/Documents/NetBeansProjects/Video%20Game/src/Brick.java</file>
             <file>file:/C:/Users/Benjamin/Documents/NetBeansProjects/Video%20Game/src/powerUp.java</file>
+>>>>>>> 937e0fb271a434245a943d90a406820ec3a31e1b
         </group>
     </open-files>
 </project-private>
