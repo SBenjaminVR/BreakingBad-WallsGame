@@ -33,6 +33,8 @@ public class Assets {
     public static SoundClip loseSound;
     public static SoundClip hitSound;
     public static SoundClip bounceSound;
+    public static BufferedImage goodPwrUp;
+    public static BufferedImage badPwrUp;
     
     /**
      * initializing the images of the game
@@ -65,6 +67,8 @@ public class Assets {
         loseSound = new SoundClip("/sounds/boom.wav");
         hitSound = new SoundClip("/sounds/hit.wav");
         bounceSound = new SoundClip("/sounds/bounce.wav");
+        
+        goodPwrUp = ImageLoader.loadImage("/images/");
         // cropping the pictures from the sheet into the array
         int count = 0;
         for (int i = 0; i < 3; i++) {

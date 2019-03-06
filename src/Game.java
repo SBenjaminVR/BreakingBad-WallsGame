@@ -42,6 +42,7 @@ public class Game implements Runnable {
     private SoundClip loseSound;
     private long tiempoActual; //tiempo de la animacion 
     private String[] arr;
+    private LinkedList<PowerUp> drops;
     
     /**
      * to create title, width and height and set the game is still not running
@@ -250,8 +251,15 @@ public class Game implements Runnable {
                     ball.setXSpeed(ball.getXSpeed() * -1);
                 }
                 
-                if (myBrick.getState() == Brick.status.destroyed && myBrick.isAnimOver()) {
-                    bricks.remove(j);
+                if (myBrick.getState() == Brick.status.destroyed) {
+                    
+                    if (myBrick.getDropProb() <= myBrick.getGoodDropChance()) {
+                        
+                    }
+                    else if (myBrick.getDropProb() >= myBrick.getGoodDropChance()) {
+
+                    }
+                    if (myBrick.isAnimOver())   bricks.remove(j);
                 }
             }
         }

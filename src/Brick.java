@@ -29,6 +29,9 @@ public class Brick extends Item {
     private SoundClip destroySound;
     private SoundClip hitSound;
     private boolean hitSndDone;
+    private int dropProb; // variable to check if brick can drop powerup
+    private int goodDropChance; // Chance to drop good powerup
+    private int badDropChance; // Chance to drop bad powerup
     
     public Brick(int x, int y, int width, int height, Game game) {
         super(x, y);
@@ -43,6 +46,9 @@ public class Brick extends Item {
         this.destroySndDone = false;
         this.hitSound = Assets.hitSound;
         this.hitSndDone = false;
+        this.dropProb = (int) (Math.random() * 100); // random number from 0 to 100
+        this.goodDropChance = 10; // if dropProb is <= goodDropChance drop it
+        this.badDropChance = 90; // if dropProb is >= badDropChance drop it
     }
     
      
@@ -81,9 +87,19 @@ public class Brick extends Item {
     public void setbTimer(int bTimer) {
         this.bTimer = bTimer;
     }
-    
-    
-    
+
+    public int getDropProb() {
+        return dropProb;
+    }
+
+    public int getBadDropChance() {
+        return badDropChance;
+    }
+
+    public int getGoodDropChance() {
+        return goodDropChance;
+    }    
+        
     @Override
     public void tick() {
         if (getState() == status.hit) {
@@ -96,7 +112,7 @@ public class Brick extends Item {
             if (!destroySndDone) {
                 destroySound.play();
                 destroySndDone = true;
-            }
+            }            
             destroyEffect.tick();
             if (destroyEffect.getIndex() == 5) {
                 animOver = true;
