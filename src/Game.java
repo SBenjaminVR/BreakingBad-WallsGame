@@ -307,7 +307,8 @@ public class Game implements Runnable {
             g = bs.getDrawGraphics();
             if (getGameState() == gameState.normal || getGameState() == gameState.pause) {
                 g.drawImage(Assets.background, 0, 0, width, height, null);
-                player.render(g);                
+                player.render(g);   
+                ball.render(g);
                 for (int i = 0; i < bricks.size(); i++) {
                     Brick myBrick = bricks.get(i);
                     myBrick.render(g);
@@ -315,7 +316,7 @@ public class Game implements Runnable {
                 if (getGameState() == gameState.pause) {
                     g.drawImage(Assets.pause, 0, 0, getWidth(), getHeight(), null);
                 }
-                ball.render(g);
+                
             }
             
             if (getGameState() == gameState.gameOver) {
