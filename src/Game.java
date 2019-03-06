@@ -27,7 +27,7 @@ public class Game implements Runnable {
     private LinkedList<Brick> bricks ;// to use the bricks 
     private Projectile ball;
     private KeyManager keyManager; // to manage the keyboard
-    private enum gameState { normal, gameOver }
+    private enum gameState { normal, gameOver, pause }
     private gameState gameState;
 
     
@@ -129,6 +129,7 @@ public class Game implements Runnable {
     
     private void tick() {
         keyManager.tick();
+        
         if (getGameState() == gameState.normal) {
             if (getPlayer().getState() == Player.playerState.dead) {
                 setGameState(gameState.gameOver);
@@ -140,8 +141,19 @@ public class Game implements Runnable {
                 Brick myBrick = bricks.get(i);
                 myBrick.tick();
             }
+            
+            if (keyManager.letterP) {
+                setGameState(gameState.pause);
+                keyManager.letterP = false;
+            }
         }
-        
+     
+        if (getGameState() == gameState.pause) {
+            if (keyManager.letterP) {
+                setGameState(gameState.normal);
+            }
+        }
+
         if (getGameState() == gameState.gameOver) {
             if (keyManager.enter) {
                 setGameState(gameState.normal);
@@ -181,6 +193,16 @@ public class Game implements Runnable {
                     Brick myBrick = bricks.get(i);
                     myBrick.render(g);
                 }
+            }
+            if (getGameState() == gameState.pause) {
+               g.drawImage(Assets.background, 0, 0, width, height, null);
+               player.render(g);
+                ball.render(g);
+                for (int i = 0; i < bricks.size(); i++) {
+                    Brick myBrick = bricks.get(i);
+                    myBrick.render(g);
+                }
+                g.drawImage(Assets.pause, 0, 0, getWidth(), getHeight(), null);
             }
             if (getGameState() == gameState.gameOver) {
                 g.drawImage(Assets.gameOver, 0, 0, getWidth(), getHeight(), null);
