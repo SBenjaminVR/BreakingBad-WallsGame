@@ -26,7 +26,7 @@ public class Brick extends Item {
     private status state;
     private int lives;
     private int bTimer;
-    private boolean canCollide;
+    private boolean animOver;
     
     public Brick(int x, int y, int width, int height, Game game) {
         super(x, y);
@@ -39,7 +39,7 @@ public class Brick extends Item {
         this.state = status.normal;
         this.lives = 2;
         this.bTimer = 0;
-        this.canCollide = true;
+        this.animOver = false;
     }
     
      
@@ -74,27 +74,34 @@ public class Brick extends Item {
     public Rectangle getyHitbox() {
         return yHitbox;
     }
+
+    public boolean isAnimOver() {
+        return animOver;
+    }
     
     
     
     @Override
     public void tick() {
-    
+        if (getState() == status.destroyed) {
+            destroyEffect.tick();
+            if (destroyEffect.getIndex() == 5) {
+                animOver = true;
+            }
+        }
     }
     
     @Override
     public void render(Graphics g) {
        if (getState() == status.normal) {
-        g.drawImage(Assets.drug, getX(), getY(), getWidth(), getHeight(), null);
+            g.drawImage(Assets.drug, getX(), getY(), getWidth(), getHeight(), null);
        }
        if (getState() == status.hit) {
-        g.drawImage(Assets.damagedBrick, getX(), getY(), getWidth(), getHeight(), null);
+            g.drawImage(Assets.damagedBrick, getX(), getY(), getWidth(), getHeight(), null);
        }
-       if (getState() != status.destroyed) {
-        g.setColor(Color.GREEN);
-        g.drawRect(xHitbox.x, xHitbox.y, xHitbox.width, xHitbox.height);
-        g.setColor(Color.RED);
-        g.drawRect(yHitbox.x, yHitbox.y, yHitbox.width, yHitbox.height);
+       if (getState() == status.destroyed) {
+           g.drawImage(destroyEffect.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
        }
+       
     }
 }

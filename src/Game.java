@@ -33,7 +33,6 @@ public class Game implements Runnable {
     
     private gameState gameState;
     private int timerBrick;
-    private int score;
     
     /**
      * to create title, width and height and set the game is still not running
@@ -75,15 +74,6 @@ public class Game implements Runnable {
     public void setGameState(gameState gameState) {
         this.gameState = gameState;
     }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-    
         
     /**
      * initializing the display window of the game
@@ -200,7 +190,7 @@ public class Game implements Runnable {
                     ball.setXSpeed(ball.getXSpeed() * -1);
                 }
                 
-                if (myBrick.getState() == Brick.status.destroyed) {
+                if (myBrick.getState() == Brick.status.destroyed && myBrick.isAnimOver()) {
                     bricks.remove(j);
                 }
             }

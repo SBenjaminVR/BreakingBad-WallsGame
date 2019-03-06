@@ -118,7 +118,12 @@ public class Projectile extends Item {
               setState(ballStatus.fallen);
             }
             // Collision with walls
-            if (getX() + getWidth() >= game.getWidth() || getX() <= 0) {
+            if (getX() + getWidth() >= game.getWidth()) {
+                
+                setXSpeed(getXSpeed() * -1);
+            }
+            else if (getX() <= 0) {
+                setX(0);
                 setXSpeed(getXSpeed() * -1);
             }
             else if (getY() <= 0) {

@@ -15,14 +15,15 @@ import java.awt.image.BufferedImage;
 public class Assets {
     public static BufferedImage background; // to store background image
     public static BufferedImage barSprites; // to store the sprites
-    public static BufferedImage playerBar[]; // pictures to go up
-    public static BufferedImage destroyEffect[]; // picture for being destroyed
+    public static BufferedImage playerBar[]; // pictures to go up    
     public static BufferedImage drug;
     public static BufferedImage damagedBrick;  
     public static BufferedImage grenadeSprites;
     public static BufferedImage grenade[];
     public static BufferedImage gameOver; // to store game over image
     public static BufferedImage pause; //to store the pause image
+    public static BufferedImage destroySprites;
+    public static BufferedImage destroyEffect[]; // picture for being destroyed
     
     /**
      * initializing the images of the game
@@ -35,13 +36,16 @@ public class Assets {
         pause = ImageLoader.loadImage("/images/Pausa.png"); 
         
         barSprites = ImageLoader.loadImage("/images/BarritaSprite.png");
-        SpreadSheet barSpritesheet = new SpreadSheet(barSprites);
-         
+        SpreadSheet barSpritesheet = new SpreadSheet(barSprites);         
         playerBar = new BufferedImage[18];
+        
         grenadeSprites = ImageLoader.loadImage("/images/granadaSprites.png");
         SpreadSheet grenadeSpritesheet = new SpreadSheet(grenadeSprites);
         grenade = new BufferedImage[35];
-        destroyEffect = new BufferedImage[4];
+        
+        destroySprites = ImageLoader.loadImage("/images/destroyedAnimationSprite.png");
+        SpreadSheet destroySpritesheet = new SpreadSheet(destroySprites);
+        destroyEffect = new BufferedImage[6];
         // cropping the pictures from the sheet into the array
         int count = 0;
         for (int i = 0; i < 3; i++) {
@@ -56,6 +60,14 @@ public class Assets {
             for (int j = 0; j < 6; j++) {
                 if (count > 34) break;
                 grenade[count] = grenadeSpritesheet.crop(i * 50, j * 50, 50, 50);
+                count++;
+            }
+        }
+        
+        count = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 2; j++) {
+                destroyEffect[count] = destroySpritesheet.crop(i * 155, j * 55, 155, 55);
                 count++;
             }
         }

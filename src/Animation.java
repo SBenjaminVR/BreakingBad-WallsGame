@@ -17,7 +17,11 @@ public class Animation {
     private long lastTime;  // to save the previous time of the animation
     private long timer;     // to acumulate the time of the animation
     private BufferedImage[] frames; // to store every image - frame
-    
+
+    public int getIndex() {
+        return index;
+    }
+        
     /**
      * Creating the animation with all the frames and the speed for each
      * @param frames an <code>array</code> of images
