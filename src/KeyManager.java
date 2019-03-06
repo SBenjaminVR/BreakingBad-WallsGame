@@ -21,7 +21,11 @@ public class KeyManager implements KeyListener {
     private boolean keys[]; // to store the flags for every key
     private boolean start;
     private boolean pause; //flag to pause the game
+    private boolean load; 
+    private boolean save; 
     private boolean lastPause; 
+    private boolean lastSave;
+    private boolean lastLoad;
 
     
     public KeyManager() {
@@ -60,6 +64,14 @@ public class KeyManager implements KeyListener {
         return pause;
     }
     
+    public boolean getSave() {
+        return save;
+    }
+    
+    public boolean getLoad() {
+        return load;
+    }
+    
     /**
      * to enable or disable moves on every tick
      */
@@ -70,10 +82,24 @@ public class KeyManager implements KeyListener {
         else {
             pause = false; 
         }
+        if (lastSave && !keys[KeyEvent.VK_G]) {
+            save = true;
+        }
+        else {
+            save = false; 
+        }
+        if (lastLoad && !keys[KeyEvent.VK_C]) {
+            load = true;
+        }
+        else {
+            load = false; 
+        }
         
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
         enter = keys[KeyEvent.VK_ENTER];
-        lastPause = keys[KeyEvent.VK_P]; 
+        lastPause = keys[KeyEvent.VK_P];
+        lastLoad = keys[KeyEvent.VK_C];
+        lastSave = keys[KeyEvent.VK_G];
     }
 }

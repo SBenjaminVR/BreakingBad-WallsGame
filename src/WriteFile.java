@@ -17,6 +17,10 @@ public class WriteFile {
     private String path;
     private boolean append_to_file = false; //Set true if you don't want to overwrite
 
+    
+    public void setAppend(boolean append) {
+        append_to_file = append;
+    }
     public WriteFile(String file_path) {
         path = file_path;
     }
@@ -26,6 +30,7 @@ public class WriteFile {
         path = file_path;
         append_to_file = append_value;
     }
+    
     public void writeToFile(String textLine) throws IOException {
         FileWriter write = new FileWriter(path, append_to_file);
         PrintWriter print_line = new PrintWriter(write);

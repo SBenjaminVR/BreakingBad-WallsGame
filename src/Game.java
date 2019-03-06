@@ -1,8 +1,15 @@
 
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,10 +37,11 @@ public class Game implements Runnable {
     private KeyManager keyManager; // to manage the keyboard
     private WriteFile saveFile;
     private enum gameState { normal, gameOver, pause, victory }
-    
     private gameState gameState;
     private int brickTimer;
     private SoundClip loseSound;
+    private long tiempoActual; //tiempo de la animacion 
+    private String[] arr;
     
     /**
      * to create title, width and height and set the game is still not running
@@ -86,23 +94,17 @@ public class Game implements Runnable {
         player = new Player(getWidth()/2 - 113, getHeight() - 75, 1, 226, 50, this);
         ball = new Projectile(player.getX() + player.getWidth()/2 - 25, player.getY() - 51, 50, 50, this);
 
+        int azarX = (int) (Math.random() * (9 - 1 + 1)) + 1;
+        int azarY = (int) (Math.random() * (4 - 0 + 1)) + 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 9; j++) {
-                int iPosX = j*141; 
-                int iPosY = 158 - i*47;
+                int iPosX = j * 141;
+                int iPosY = 158 - i * 47;
                 bricks.add(new Brick(iPosX, iPosY, 155, 55, this));
             }
         }
 
         display.getJframe().addKeyListener(keyManager);
-
-        try {
-            saveFile = new WriteFile("test.txt", false);
-            saveFile.writeToFile("Benja es cool");
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
     }
     
     public KeyManager getKeyManager() {
@@ -132,7 +134,11 @@ public class Game implements Runnable {
             
             // if delta is positive we tick the game
             if (delta >= 1) {
-                tick();
+                try {
+                    tick();
+                } catch (IOException ex) {
+                    Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 render();
                 delta--;
             }
@@ -140,7 +146,56 @@ public class Game implements Runnable {
         stop();
     }
     
-    private void tick() {
+    private void save() {
+        try {
+            saveFile = new WriteFile("save.txt", false);
+            saveFile.writeToFile(String.valueOf(player.getX()));
+            saveFile.setAppend(true);
+            saveFile.writeToFile(String.valueOf(player.getY()));
+
+            /*
+            g.setFont(new Font("Arial", Font.PLAIN, 40));
+            g.setColor(Color.white);
+            g.drawString("Juego guardado", 500, 500);
+            */
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void leeArchivo() throws IOException {
+        BufferedReader fileIn;
+        try {
+            fileIn = new BufferedReader(new FileReader("save.txt"));
+        } catch (FileNotFoundException e) {
+            File puntos = new File("save.txt");
+            PrintWriter fileOut = new PrintWriter(puntos);
+            fileOut.println("100,demo");
+            fileOut.close();
+            fileIn = new BufferedReader(new FileReader("save.txt"));
+        }
+        String dato = fileIn.readLine();
+        int contador = 0;
+        while (dato != null) {
+
+            arr = dato.split(",");
+           // player.setX(arr);
+            int num = (Integer.parseInt(dato));
+            if (contador == 0) {
+            player.setX(num);
+            }
+            else {
+                player.setY(num);
+            }
+            //String nom = arr[1];
+            //vec.add(new Puntaje(nom, num));
+            dato = fileIn.readLine();
+            contador++;
+        }
+        fileIn.close();
+    }
+    
+    private void tick() throws IOException {
         brickTimer--;
         keyManager.tick();
         if (keyManager.getPause() && getGameState() == gameState.normal) {
@@ -151,6 +206,13 @@ public class Game implements Runnable {
             if (keyManager.getPause() && getGameState() == gameState.pause) {
                 setGameState(gameState.normal);
             }
+        }
+        
+        if (keyManager.getSave()) {
+            save();
+        }
+        if (keyManager.getLoad()) {
+            leeArchivo();
         }
         
         if (getGameState() == gameState.normal) {
