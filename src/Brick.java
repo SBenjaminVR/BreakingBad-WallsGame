@@ -27,6 +27,10 @@ public class Brick extends Item {
     private int lives;
     private int bTimer;
     private boolean animOver;
+    private boolean destroySndDone;
+    private SoundClip destroySound;
+    private SoundClip hitSound;
+    private boolean hitSndDone;
     
     public Brick(int x, int y, int width, int height, Game game) {
         super(x, y);
@@ -38,8 +42,11 @@ public class Brick extends Item {
         this.destroyEffect = new Animation(Assets.destroyEffect, 100);
         this.state = status.normal;
         this.lives = 2;
-        this.bTimer = 0;
         this.animOver = false;
+        this.destroySound = Assets.destroySound;
+        this.destroySndDone = false;
+        this.hitSound = Assets.hitSound;
+        this.hitSndDone = false;
     }
     
      
@@ -91,8 +98,17 @@ public class Brick extends Item {
     
     @Override
     public void tick() {
-        if (bTimer > 0) bTimer--;
+        if (getState() == status.hit) {
+            if (!hitSndDone) {
+                hitSound.play();
+                hitSndDone = true;
+            }
+        }
         if (getState() == status.destroyed) {
+            if (!destroySndDone) {
+                destroySound.play();
+                destroySndDone = true;
+            }
             destroyEffect.tick();
             if (destroyEffect.getIndex() == 5) {
                 animOver = true;

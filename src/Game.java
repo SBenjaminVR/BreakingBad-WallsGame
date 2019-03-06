@@ -33,7 +33,8 @@ public class Game implements Runnable {
     private enum gameState { normal, gameOver, pause, victory }
     private int powerNumber;
     private gameState gameState;
-    private int timerBrick;
+    private int brickTimer;
+    private SoundClip loseSound;
     
     /**
      * to create title, width and height and set the game is still not running
@@ -49,8 +50,8 @@ public class Game implements Runnable {
         keyManager = new KeyManager();
         this.gameState = gameState.normal;
         bricks = new LinkedList<Brick>();
-        timerBrick = 0;
         powerNumber = 0;
+        brickTimer = 0;
     }
 
     public int getWidth() {
@@ -82,7 +83,8 @@ public class Game implements Runnable {
      */
     private void init() {
         display = new Display(title, width, height);
-        Assets.init();
+        Assets.init();        
+        loseSound = Assets.loseSound;
         player = new Player(getWidth()/2 - 113, getHeight() - 75, 1, 226, 50, this);
         ball = new Projectile(player.getX() + player.getWidth()/2 - 25, player.getY() - 51, 50, 50, this);
 
@@ -152,7 +154,7 @@ public class Game implements Runnable {
     }
     
     private void tick() {
-        
+        brickTimer--;
         keyManager.tick();
         if (keyManager.getPause() && getGameState() == gameState.normal) {
                 setGameState(gameState.pause);
@@ -166,7 +168,8 @@ public class Game implements Runnable {
         
         if (getGameState() == gameState.normal) {
             if (getPlayer().getState() == Player.playerState.dead) {
-                setGameState(gameState.gameOver);                
+                setGameState(gameState.gameOver);
+                loseSound.play();
             }
             if (bricks.isEmpty()) {
                 setGameState(gameState.victory);
@@ -191,24 +194,23 @@ public class Game implements Runnable {
                 boolean yIntersects = ball.getHitbox().intersects(myBrick.getyHitbox());
                 boolean xIntersects = ball.getHitbox().intersects(myBrick.getxHitbox());
 
-                if(yIntersects && myBrick.getbTimer() <= 0){
+                if(yIntersects && brickTimer <= 0){
 //                        player.setScore(player.getScore() + 5);
                     if (myBrick.getState() == Brick.status.normal) myBrick.setState(Brick.status.hit);
                     else if (myBrick.getState() == Brick.status.hit) myBrick.setState(Brick.status.destroyed);
                     yIntersects = false;
 
-                    myBrick.setbTimer(5);
+                    brickTimer = 10;
 
                     ball.setYSpeed(ball.getYSpeed() * -1);
                 }
-                else if (xIntersects && myBrick.getbTimer() <= 0){
+                else if (xIntersects && brickTimer <= 0){
 //                        player.setScore(player.getScore() + 5);
                     if (myBrick.getState() == Brick.status.normal) myBrick.setState(Brick.status.hit);
                     else if (myBrick.getState() == Brick.status.hit) myBrick.setState(Brick.status.destroyed);
                     xIntersects = false;
-
                     myBrick.setbTimer(10);
-
+                    brickTimer = 10;
                     ball.setXSpeed(ball.getXSpeed() * -1);
                 }
                 
