@@ -164,6 +164,11 @@ public class Projectile extends Item {
         }
     }
     
+    public boolean intersecta(Object obj) {
+        return obj instanceof Brick && hitbox.intersects(((Brick) obj).getPerimetro());
+        
+    }
+    
     @Override
     public void render(Graphics g) {
        g.drawImage(anim.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
