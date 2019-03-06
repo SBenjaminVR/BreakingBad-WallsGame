@@ -26,11 +26,12 @@ public class Game implements Runnable {
     private boolean running; //to set the game
     private Player player; // to use a player
     private LinkedList<Brick> bricks ;// to use the bricks 
+    private powerUp powerBlock;
     private Projectile ball;
     private KeyManager keyManager; // to manage the keyboard
     private WriteFile saveFile;
     private enum gameState { normal, gameOver, pause, victory }
-    
+    private int powerNumber;
     private gameState gameState;
     private int timerBrick;
     
@@ -49,6 +50,7 @@ public class Game implements Runnable {
         this.gameState = gameState.normal;
         bricks = new LinkedList<Brick>();
         timerBrick = 0;
+        powerNumber = 0;
     }
 
     public int getWidth() {
@@ -84,11 +86,22 @@ public class Game implements Runnable {
         player = new Player(getWidth()/2 - 113, getHeight() - 75, 1, 226, 50, this);
         ball = new Projectile(player.getX() + player.getWidth()/2 - 25, player.getY() - 51, 50, 50, this);
 
+        int azarX = (int) (Math.random() * (9-1+1) ) + 1;
+        int azarY = (int) (Math.random() * (4-0+1) ) + 0;
+        int contador = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 9; j++) {
                 int iPosX = j*141; 
                 int iPosY = 158 - i*47;
-                bricks.add(new Brick(iPosX, iPosY, 155, 55, this));
+                if (j == azarX && i == azarY) {
+                   powerBlock = new powerUp(iPosX, iPosY, 155, 55, this);
+                   powerNumber = contador;
+                }
+                else {
+                    contador++;
+                    bricks.add(new Brick(iPosX, iPosY, 155, 55, this));
+                }
+                
             }
         }
 
@@ -163,8 +176,13 @@ public class Game implements Runnable {
             player.tick();
             ball.tick();
             for (int i = 0; i < bricks.size(); i++) {
-                Brick myBrick = bricks.get(i);
-                myBrick.tick();
+                if (i == powerNumber) {
+                    powerBlock.tick();
+                }
+                else {
+                    Brick myBrick = bricks.get(i);
+                    myBrick.tick();
+                }
             }
             
             for(int j = 0; j < bricks.size(); j++){
@@ -189,7 +207,7 @@ public class Game implements Runnable {
                     else if (myBrick.getState() == Brick.status.hit) myBrick.setState(Brick.status.destroyed);
                     xIntersects = false;
 
-                    myBrick.setbTimer(5);
+                    myBrick.setbTimer(10);
 
                     ball.setXSpeed(ball.getXSpeed() * -1);
                 }
@@ -253,8 +271,13 @@ public class Game implements Runnable {
                 g.drawImage(Assets.background, 0, 0, width, height, null);
                 player.render(g);                
                 for (int i = 0; i < bricks.size(); i++) {
-                    Brick myBrick = bricks.get(i);
-                    myBrick.render(g);
+                    if (i == powerNumber) {
+                        powerBlock.render(g);
+                    }
+                    else {
+                        Brick myBrick = bricks.get(i);
+                        myBrick.render(g);
+                    }
                 }
                 if (getGameState() == gameState.pause) {
                     g.drawImage(Assets.pause, 0, 0, getWidth(), getHeight(), null);
