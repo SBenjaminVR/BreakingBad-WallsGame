@@ -1,4 +1,5 @@
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -18,21 +19,25 @@ public class Brick extends Item {
     private int width;
     private int height;
     private Game game;
-    private Rectangle hitbox;
+    private Rectangle xHitbox;
+    private Rectangle yHitbox;
     private Animation destroyEffect; // to store the animation for being destroyed
     private enum status { normal, hit, destroyed }
     private status state;
     private int lives;
+    private int bTimer;
     
     public Brick(int x, int y, int width, int height, Game game) {
         super(x, y);
         this.width = width;
         this.height = height;
         this.game = game;
-        this.hitbox = new Rectangle(x, y+8, width-13, height-8);
+        this.xHitbox = new Rectangle(x, y+15, width-13, height-20);
+        this.yHitbox = new Rectangle(x + 10, y+8, width-28, height-8);
         this.destroyEffect = new Animation(Assets.destroyEffect, 100);
         this.state = status.normal;
         this.lives = 2;
+        this.bTimer = 0;
     }
     
      
@@ -58,27 +63,41 @@ public class Brick extends Item {
 
     public void setState(status state) {
         this.state = state;
-    }
-    
-    public Rectangle getHitbox() {
-        return hitbox;
-    }
-    
+    }    
     
     @Override
     public void tick() {
-
-        if (game.getBall().getHitbox().intersects(getHitbox())) {
-            setState(status.hit);
-            //game.getBall().
+        bTimer--;
+        if (bTimer <= 0) game.getBall().setCollision(false);
+        if (!game.getBall().isCollision()) {
+            if (yHitbox.intersects(game.getBall().getHitbox())) {
+                
+                game.getBall().setYSpeed(game.getBall().getYSpeed() * -1);
+                if (getState() == status.normal) {
+                    setState(status.hit);
+                }
+                else {
+                    setState(status.destroyed);
+                }
+                game.getBall().setCollision(true);                
+            }
+            else if (xHitbox.intersects(game.getBall().getHitbox())) {
+                
+                game.getBall().setXSpeed(game.getBall().getXSpeed() * -1);
+                if (getState() == status.normal) {
+                    setState(status.hit);
+                }
+                else {
+                    setState(status.destroyed);
+                }
+                game.getBall().setCollision(true);
+            }
+            bTimer = 24;
         }
-        /*
-        if (getState() == status.hit) {
-            this.destroyEffect.tick();
-            
-        }
-*/
         
+        if (getState() == status.destroyed) {
+            this.destroyEffect.tick();            
+        }        
     }
     
     @Override
@@ -89,7 +108,11 @@ public class Brick extends Item {
        if (getState() == status.hit) {
         g.drawImage(Assets.damagedBrick, getX(), getY(), getWidth(), getHeight(), null);
        }
-       
-       g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+       if (getState() != status.destroyed) {
+        g.setColor(Color.GREEN);
+        g.drawRect(xHitbox.x, xHitbox.y, xHitbox.width, xHitbox.height);
+        g.setColor(Color.RED);
+        g.drawRect(yHitbox.x, yHitbox.y, yHitbox.width, yHitbox.height);
+       }
     }
 }

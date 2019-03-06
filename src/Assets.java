@@ -34,7 +34,7 @@ public class Assets {
         
         barSprites = ImageLoader.loadImage("/images/BarritaSprite.png");
         SpreadSheet barSpritesheet = new SpreadSheet(barSprites);
-        
+         
         playerBar = new BufferedImage[18];
         grenadeSprites = ImageLoader.loadImage("/images/granadaSprites.png");
         SpreadSheet grenadeSpritesheet = new SpreadSheet(grenadeSprites);

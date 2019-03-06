@@ -25,11 +25,11 @@ public class Projectile extends Item {
         idle, base, fallen
     }
     private ballStatus state;
-    private int dirX;
-    private int dirY;
     private double xSpeed;
     private double ySpeed;
     private double speed;
+    private boolean collision;
+    
     
     public Projectile(int x, int y, int width, int height, Game game) {
         super(x, y);
@@ -37,13 +37,12 @@ public class Projectile extends Item {
         this.height = height;
         this.game = game;
         this.state = ballStatus.idle;
-        this.dirX = -1;
-        this.dirY = -1;
         this.speed = 8;
         this.xSpeed = 0;
         this.ySpeed = -8;
         this.hitbox = new Rectangle(x, y, width, height);  
         this.anim = new Animation(Assets.grenade, 100);
+        this.collision = false;
     }
     
      
@@ -71,22 +70,6 @@ public class Projectile extends Item {
         return state;
     }
 
-    public int getDirX() {
-        return dirX;
-    }
-
-    public int getDirY() {
-        return dirY;
-    }
-
-    public void setDirX(int dirX) {
-        this.dirX = dirX;
-    }
-
-    public void setDirY(int dirY) {
-        this.dirY = dirY;
-    }
-
     public double getXSpeed() {
         return xSpeed;
     }
@@ -110,7 +93,15 @@ public class Projectile extends Item {
     public Rectangle getHitbox() {
         return hitbox;
     }
-    
+
+    public boolean isCollision() {
+        return collision;
+    }
+
+    public void setCollision(boolean collision) {
+        this.collision = collision;
+    }
+            
     @Override
     public void tick() {
         hitbox.setLocation(getX(), getY());
@@ -158,8 +149,7 @@ public class Projectile extends Item {
                 angle = Math.toRadians(angle);
                 setXSpeed((right ? 1 : -1) * getSpeed() * Math.cos(angle));
                 setYSpeed(-1 * getSpeed() * Math.sin(angle));
-            }
-                      
+            }                      
             setX((int) (getX() + getXSpeed()));
             setY((int) (getY() + getYSpeed()));
         }
