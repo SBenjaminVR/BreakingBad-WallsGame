@@ -26,6 +26,7 @@ public class Brick extends Item {
     private status state;
     private int lives;
     private int bTimer;
+    private boolean canCollide;
     
     public Brick(int x, int y, int width, int height, Game game) {
         super(x, y);
@@ -38,6 +39,7 @@ public class Brick extends Item {
         this.state = status.normal;
         this.lives = 2;
         this.bTimer = 0;
+        this.canCollide = true;
     }
     
      
@@ -68,9 +70,9 @@ public class Brick extends Item {
     @Override
     public void tick() {
         bTimer--;
-        if (bTimer <= 0) game.getBall().setCollision(false);
-        if (!game.getBall().isCollision()) {
-            if (yHitbox.intersects(game.getBall().getHitbox())) {
+        if (bTimer <= 0) canCollide = true;
+        if (canCollide) {
+            if (getState() != status.destroyed && yHitbox.intersects(game.getBall().getHitbox())) {
                 
                 game.getBall().setYSpeed(game.getBall().getYSpeed() * -1);
                 if (getState() == status.normal) {
@@ -78,10 +80,9 @@ public class Brick extends Item {
                 }
                 else {
                     setState(status.destroyed);
-                }
-                game.getBall().setCollision(true);                
+                }             
             }
-            else if (xHitbox.intersects(game.getBall().getHitbox())) {
+            else if (getState() != status.destroyed && xHitbox.intersects(game.getBall().getHitbox())) {
                 
                 game.getBall().setXSpeed(game.getBall().getXSpeed() * -1);
                 if (getState() == status.normal) {
@@ -89,10 +90,10 @@ public class Brick extends Item {
                 }
                 else {
                     setState(status.destroyed);
-                }
-                game.getBall().setCollision(true);
+                }                
             }
-            bTimer = 24;
+            canCollide = false;
+            bTimer = 5;
         }
         
         if (getState() == status.destroyed) {

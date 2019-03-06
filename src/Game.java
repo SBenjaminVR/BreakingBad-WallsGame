@@ -164,7 +164,7 @@ public class Game implements Runnable {
                         int iPosY = 158 - i * 47;
                         bricks.add(new Brick(iPosX, iPosY, 155, 55, this));
                     }
-        }
+                }
             }
         }
     }
