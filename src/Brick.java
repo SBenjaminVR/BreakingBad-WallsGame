@@ -22,7 +22,7 @@ public class Brick extends Item {
     private Rectangle xHitbox;
     private Rectangle yHitbox;
     private Animation destroyEffect; // to store the animation for being destroyed
-    private enum status { normal, hit, destroyed }
+    public enum status { normal, hit, destroyed }
     private status state;
     private int lives;
     private int bTimer;
@@ -65,40 +65,21 @@ public class Brick extends Item {
 
     public void setState(status state) {
         this.state = state;
-    }    
+    } 
+
+    public Rectangle getxHitbox() {
+        return xHitbox;
+    }
+
+    public Rectangle getyHitbox() {
+        return yHitbox;
+    }
+    
+    
     
     @Override
     public void tick() {
-        bTimer--;
-        if (bTimer <= 0) canCollide = true;
-        if (canCollide) {
-            if (getState() != status.destroyed && yHitbox.intersects(game.getBall().getHitbox())) {
-                
-                game.getBall().setYSpeed(game.getBall().getYSpeed() * -1);
-                if (getState() == status.normal) {
-                    setState(status.hit);
-                }
-                else {
-                    setState(status.destroyed);
-                }             
-            }
-            else if (getState() != status.destroyed && xHitbox.intersects(game.getBall().getHitbox())) {
-                
-                game.getBall().setXSpeed(game.getBall().getXSpeed() * -1);
-                if (getState() == status.normal) {
-                    setState(status.hit);
-                }
-                else {
-                    setState(status.destroyed);
-                }                
-            }
-            canCollide = false;
-            bTimer = 5;
-        }
-        
-        if (getState() == status.destroyed) {
-            this.destroyEffect.tick();            
-        }        
+    
     }
     
     @Override
