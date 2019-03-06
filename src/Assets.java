@@ -30,7 +30,7 @@ public class Assets {
         background = ImageLoader.loadImage("/images/Background.jpg");
         gameOver = ImageLoader.loadImage("/images/gameoverscreen.jpg");
         drug = ImageLoader.loadImage("/images/methSprite.png"); 
-        damagedBrick = ImageLoader.loadImage("/images/methSprite.png"); 
+        damagedBrick = ImageLoader.loadImage("/images/damagedSprite.png"); 
         
         barSprites = ImageLoader.loadImage("/images/BarritaSprite.png");
         SpreadSheet barSpritesheet = new SpreadSheet(barSprites);

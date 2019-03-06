@@ -20,7 +20,7 @@ public class Brick extends Item {
     private Game game;
     private Rectangle hitbox;
     private Animation destroyEffect; // to store the animation for being destroyed
-    private enum status { normal, hit }
+    private enum status { normal, hit, destroyed }
     private status state;
     private int lives;
     
@@ -60,12 +60,17 @@ public class Brick extends Item {
         this.state = state;
     }
     
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
+    
     
     @Override
     public void tick() {
-        if (game.getBall().getHitbox().intersects(hitbox)) {
+
+        if (game.getBall().getHitbox().intersects(getHitbox())) {
             setState(status.hit);
-            
+            //game.getBall().
         }
         /*
         if (getState() == status.hit) {
@@ -84,5 +89,7 @@ public class Brick extends Item {
        if (getState() == status.hit) {
         g.drawImage(Assets.damagedBrick, getX(), getY(), getWidth(), getHeight(), null);
        }
+       
+       g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
     }
 }

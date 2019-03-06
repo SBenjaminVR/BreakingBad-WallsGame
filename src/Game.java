@@ -129,20 +129,32 @@ public class Game implements Runnable {
     
     private void tick() {
         keyManager.tick();
-        if (getGameState() == gameState.normal) {            
+        if (getGameState() == gameState.normal) {
             if (getPlayer().getState() == Player.playerState.dead) {
                 setGameState(gameState.gameOver);
             }
             // advancing player with collision
             player.tick();
             ball.tick();
+            for (int i = 0; i < bricks.size(); i++) {
+                Brick myBrick = bricks.get(i);
+                myBrick.tick();
+            }
         }
+        
         if (getGameState() == gameState.gameOver) {
             if (keyManager.enter) {
                 setGameState(gameState.normal);
                 keyManager.setStart(false);
                 player = new Player(getWidth()/2 - 113, getHeight() - 75, 1, 226, 50, this);
                 ball = new Projectile(player.getX() + player.getWidth()/2 - 25, player.getY() - 51, 50, 50, this);
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 9; j++) {
+                        int iPosX = j * 141;
+                        int iPosY = 158 - i * 47;
+                        bricks.add(new Brick(iPosX, iPosY, 155, 55, this));
+                    }
+        }
             }
         }
     }
