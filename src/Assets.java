@@ -22,6 +22,7 @@ public class Assets {
     public static BufferedImage grenadeSprites;
     public static BufferedImage grenade[];
     public static BufferedImage gameOver; // to store game over image
+    public static BufferedImage pause; //to store the pause image
     
     /**
      * initializing the images of the game
@@ -31,6 +32,7 @@ public class Assets {
         gameOver = ImageLoader.loadImage("/images/gameoverscreen.jpg");
         drug = ImageLoader.loadImage("/images/methSprite.png"); 
         damagedBrick = ImageLoader.loadImage("/images/damagedSprite.png"); 
+        pause = ImageLoader.loadImage("/images/Pausa.png"); 
         
         barSprites = ImageLoader.loadImage("/images/BarritaSprite.png");
         SpreadSheet barSpritesheet = new SpreadSheet(barSprites);

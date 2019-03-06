@@ -20,6 +20,8 @@ public class KeyManager implements KeyListener {
     
     private boolean keys[]; // to store the flags for every key
     private boolean start;
+    private boolean pause; //flag to pause the game
+    private boolean lastPause; 
 
     
     public KeyManager() {
@@ -34,7 +36,7 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         // set true every key pressed
-        keys[e.getKeyCode()] = true;
+         keys[e.getKeyCode()] = true;
     }
     
     @Override
@@ -54,12 +56,24 @@ public class KeyManager implements KeyListener {
         this.start = start;
     }
     
+    public boolean getPause() {
+        return pause;
+    }
+    
     /**
      * to enable or disable moves on every tick
      */
     public void tick() {
+        if (lastPause && !keys[KeyEvent.VK_P]) {
+            pause = true;
+        }
+        else {
+            pause = false; 
+        }
+        
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
         enter = keys[KeyEvent.VK_ENTER];
+        lastPause = keys[KeyEvent.VK_P]; 
     }
 }
