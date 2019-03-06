@@ -33,7 +33,7 @@ public class Game implements Runnable {
     
     private gameState gameState;
     private int timerBrick;
-
+    private int score;
     
     /**
      * to create title, width and height and set the game is still not running
@@ -75,6 +75,15 @@ public class Game implements Runnable {
     public void setGameState(gameState gameState) {
         this.gameState = gameState;
     }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+    
         
     /**
      * initializing the display window of the game
@@ -97,7 +106,7 @@ public class Game implements Runnable {
 
         try {
             saveFile = new WriteFile("test.txt", false);
-            saveFile.writeToFile("Nuevo texto, humberto es n00b");
+            saveFile.writeToFile("Benja es cool");
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -154,7 +163,7 @@ public class Game implements Runnable {
         
         if (getGameState() == gameState.normal) {
             if (getPlayer().getState() == Player.playerState.dead) {
-                setGameState(gameState.gameOver);
+                setGameState(gameState.gameOver);                
             }
             // advancing player with collision
             player.tick();
@@ -198,6 +207,9 @@ public class Game implements Runnable {
         }
 
         if (getGameState() == gameState.gameOver) {
+             for (int i = 0; i < bricks.size(); i++) {
+                 bricks.remove(i);
+             }
             if (keyManager.enter) {
                 setGameState(gameState.normal);
                 keyManager.setStart(false);
