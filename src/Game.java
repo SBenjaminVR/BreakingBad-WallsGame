@@ -1,6 +1,7 @@
 
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.io.IOException;
 import java.util.LinkedList;
 
 /*
@@ -27,7 +28,9 @@ public class Game implements Runnable {
     private LinkedList<Brick> bricks ;// to use the bricks 
     private Projectile ball;
     private KeyManager keyManager; // to manage the keyboard
+    private WriteFile saveFile;
     private enum gameState { normal, gameOver, pause }
+    
     private gameState gameState;
 
     
@@ -45,7 +48,6 @@ public class Game implements Runnable {
         keyManager = new KeyManager();
         this.gameState = gameState.normal;
         bricks = new LinkedList<Brick>();
-
     }
 
     public int getWidth() {
@@ -90,6 +92,14 @@ public class Game implements Runnable {
         }
 
         display.getJframe().addKeyListener(keyManager);
+
+        try {
+            saveFile = new WriteFile("test.txt", false);
+            saveFile.writeToFile("Nuevo texto, humberto es n00b");
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
     
     public KeyManager getKeyManager() {
