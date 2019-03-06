@@ -29,6 +29,7 @@ public class Projectile extends Item {
     private double ySpeed;
     private double speed;
     private boolean collision;
+    private SoundClip bounceSound;
     
     
     public Projectile(int x, int y, int width, int height, Game game) {
@@ -43,6 +44,7 @@ public class Projectile extends Item {
         this.hitbox = new Rectangle(x, y, width, height);  
         this.anim = new Animation(Assets.grenade, 100);
         this.collision = false;
+        this.bounceSound = Assets.bounceSound;
     }
     
      
@@ -132,6 +134,7 @@ public class Projectile extends Item {
 
             // Collision with player
             if (hitbox.intersects(game.getPlayer().getHitbox())) {
+                bounceSound.play();
                 int position = (getX() + getWidth() / 2) - (int)game.getPlayer().getHitbox().getX();
                 double angle;
                 boolean right = false;

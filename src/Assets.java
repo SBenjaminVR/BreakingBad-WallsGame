@@ -29,6 +29,10 @@ public class Assets {
     public static BufferedImage destroySprites;
     public static BufferedImage destroyEffect[]; // picture for being destroyed
     public static BufferedImage victory;
+    public static SoundClip destroySound;
+    public static SoundClip loseSound;
+    public static SoundClip hitSound;
+    public static SoundClip bounceSound;
     
     /**
      * initializing the images of the game
@@ -56,6 +60,11 @@ public class Assets {
         destroySprites = ImageLoader.loadImage("/images/destroyedAnimationSprite.png");
         SpreadSheet destroySpritesheet = new SpreadSheet(destroySprites);
         destroyEffect = new BufferedImage[6];
+        
+        destroySound = new SoundClip("/sounds/destroy.wav");
+        loseSound = new SoundClip("/sounds/boom.wav");
+        hitSound = new SoundClip("/sounds/hit.wav");
+        bounceSound = new SoundClip("/sounds/bounce.wav");
         // cropping the pictures from the sheet into the array
         int count = 0;
         for (int i = 0; i < 3; i++) {
