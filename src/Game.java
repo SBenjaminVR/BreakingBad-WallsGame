@@ -32,6 +32,7 @@ public class Game implements Runnable {
     private enum gameState { normal, gameOver, pause }
     
     private gameState gameState;
+    private int timerBrick;
 
     
     /**
@@ -48,6 +49,7 @@ public class Game implements Runnable {
         keyManager = new KeyManager();
         this.gameState = gameState.normal;
         bricks = new LinkedList<Brick>();
+        timerBrick = 0;
     }
 
     public int getWidth() {
@@ -138,6 +140,7 @@ public class Game implements Runnable {
     }
     
     private void tick() {
+        timerBrick--;
         keyManager.tick();
         if (keyManager.getPause() && getGameState() == gameState.normal) {
                 setGameState(gameState.pause);
@@ -160,6 +163,38 @@ public class Game implements Runnable {
                 Brick myBrick = bricks.get(i);
                 myBrick.tick();
             }
+            
+            for(int j = 0; j < bricks.size(); j++){
+                Brick myBrick = bricks.get(j);
+
+                boolean yIntersects = ball.getHitbox().intersects(myBrick.getyHitbox());
+                boolean xIntersects = ball.getHitbox().intersects(myBrick.getxHitbox());
+
+                if(yIntersects && timerBrick <= 0){
+//                        player.setScore(player.getScore() + 5);
+                    if (myBrick.getState() == Brick.status.normal) myBrick.setState(Brick.status.hit);
+                    else if (myBrick.getState() == Brick.status.hit) myBrick.setState(Brick.status.destroyed);
+                    yIntersects = false;
+
+                    timerBrick = 10;
+
+                    ball.setYSpeed(ball.getYSpeed() * -1);
+                }
+                else if (xIntersects && timerBrick <= 0){
+//                        player.setScore(player.getScore() + 5);
+                    if (myBrick.getState() == Brick.status.normal) myBrick.setState(Brick.status.hit);
+                    else if (myBrick.getState() == Brick.status.hit) myBrick.setState(Brick.status.destroyed);
+                    xIntersects = false;
+
+                    timerBrick = 10;
+
+                    ball.setXSpeed(ball.getXSpeed() * -1);
+                }
+                
+                if (myBrick.getState() == Brick.status.destroyed) {
+                    bricks.remove(j);
+                }
+            }
         }
 
         if (getGameState() == gameState.gameOver) {
@@ -174,7 +209,7 @@ public class Game implements Runnable {
                         int iPosY = 158 - i * 47;
                         bricks.add(new Brick(iPosX, iPosY, 155, 55, this));
                     }
-        }
+                }
             }
         }
     }

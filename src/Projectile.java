@@ -152,6 +152,7 @@ public class Projectile extends Item {
             }                      
             setX((int) (getX() + getXSpeed()));
             setY((int) (getY() + getYSpeed()));
+            setCollision(false);
         }
     }
     
