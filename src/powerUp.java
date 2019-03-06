@@ -94,13 +94,13 @@ public class powerUp extends Item {
     @Override
     public void render(Graphics g) {
        if (getState() == status.normal) {
-            g.drawImage(Assets.drug, getX(), getY(), getWidth(), getHeight(), null);
+            g.drawImage(Assets.powerUp, getX(), getY(), getWidth(), getHeight(), null);
        }
        if (getState() == status.hit) {
-            g.drawImage(Assets.damagedBrick, getX(), getY(), getWidth(), getHeight(), null);
+            g.drawImage(Assets.damagedPowerUp, getX(), getY(), getWidth(), getHeight(), null);
        }
        if (getState() == status.destroyed) {
-           g.drawImage(destroyEffect.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
+           g.drawImage(powerAnimation.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
        }
        
     }
