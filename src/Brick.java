@@ -33,7 +33,7 @@ public class Brick extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        this.xHitbox = new Rectangle(x, y+15, width-13, height-20);
+        this.xHitbox = new Rectangle(x, y+15, width-13, height-25);
         this.yHitbox = new Rectangle(x + 10, y+8, width-28, height-8);
         this.destroyEffect = new Animation(Assets.destroyEffect, 100);
         this.state = status.normal;
@@ -78,11 +78,20 @@ public class Brick extends Item {
     public boolean isAnimOver() {
         return animOver;
     }
+
+    public int getbTimer() {
+        return bTimer;
+    }
+
+    public void setbTimer(int bTimer) {
+        this.bTimer = bTimer;
+    }
     
     
     
     @Override
     public void tick() {
+        if (bTimer > 0) bTimer--;
         if (getState() == status.destroyed) {
             destroyEffect.tick();
             if (destroyEffect.getIndex() == 5) {

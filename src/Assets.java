@@ -24,6 +24,7 @@ public class Assets {
     public static BufferedImage pause; //to store the pause image
     public static BufferedImage destroySprites;
     public static BufferedImage destroyEffect[]; // picture for being destroyed
+    public static BufferedImage victory;
     
     /**
      * initializing the images of the game
@@ -33,7 +34,8 @@ public class Assets {
         gameOver = ImageLoader.loadImage("/images/gameoverscreen.jpg");
         drug = ImageLoader.loadImage("/images/methSprite.png"); 
         damagedBrick = ImageLoader.loadImage("/images/damagedSprite.png"); 
-        pause = ImageLoader.loadImage("/images/Pausa.png"); 
+        pause = ImageLoader.loadImage("/images/Pausa.png");
+        victory = ImageLoader.loadImage("/images/victoryScreen.jpg");
         
         barSprites = ImageLoader.loadImage("/images/BarritaSprite.png");
         SpreadSheet barSpritesheet = new SpreadSheet(barSprites);         

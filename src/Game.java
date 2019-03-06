@@ -29,7 +29,7 @@ public class Game implements Runnable {
     private Projectile ball;
     private KeyManager keyManager; // to manage the keyboard
     private WriteFile saveFile;
-    private enum gameState { normal, gameOver, pause }
+    private enum gameState { normal, gameOver, pause, victory }
     
     private gameState gameState;
     private int timerBrick;
@@ -139,7 +139,7 @@ public class Game implements Runnable {
     }
     
     private void tick() {
-        timerBrick--;
+        
         keyManager.tick();
         if (keyManager.getPause() && getGameState() == gameState.normal) {
                 setGameState(gameState.pause);
@@ -155,6 +155,10 @@ public class Game implements Runnable {
             if (getPlayer().getState() == Player.playerState.dead) {
                 setGameState(gameState.gameOver);                
             }
+            if (bricks.isEmpty()) {
+                setGameState(gameState.victory);
+            }
+            
             // advancing player with collision
             player.tick();
             ball.tick();
@@ -169,29 +173,44 @@ public class Game implements Runnable {
                 boolean yIntersects = ball.getHitbox().intersects(myBrick.getyHitbox());
                 boolean xIntersects = ball.getHitbox().intersects(myBrick.getxHitbox());
 
-                if(yIntersects && timerBrick <= 0){
+                if(yIntersects && myBrick.getbTimer() <= 0){
 //                        player.setScore(player.getScore() + 5);
                     if (myBrick.getState() == Brick.status.normal) myBrick.setState(Brick.status.hit);
                     else if (myBrick.getState() == Brick.status.hit) myBrick.setState(Brick.status.destroyed);
                     yIntersects = false;
 
-                    timerBrick = 10;
+                    myBrick.setbTimer(5);
 
                     ball.setYSpeed(ball.getYSpeed() * -1);
                 }
-                else if (xIntersects && timerBrick <= 0){
+                else if (xIntersects && myBrick.getbTimer() <= 0){
 //                        player.setScore(player.getScore() + 5);
                     if (myBrick.getState() == Brick.status.normal) myBrick.setState(Brick.status.hit);
                     else if (myBrick.getState() == Brick.status.hit) myBrick.setState(Brick.status.destroyed);
                     xIntersects = false;
 
-                    timerBrick = 10;
+                    myBrick.setbTimer(5);
 
                     ball.setXSpeed(ball.getXSpeed() * -1);
                 }
                 
                 if (myBrick.getState() == Brick.status.destroyed && myBrick.isAnimOver()) {
                     bricks.remove(j);
+                }
+            }
+        }
+        if (getGameState() == gameState.victory) {
+            if (keyManager.enter) {
+                setGameState(gameState.normal);
+                keyManager.setStart(false);
+                player = new Player(getWidth()/2 - 113, getHeight() - 75, 1, 226, 50, this);
+                ball = new Projectile(player.getX() + player.getWidth()/2 - 25, player.getY() - 51, 50, 50, this);
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 9; j++) {
+                        int iPosX = j * 141;
+                        int iPosY = 158 - i * 47;
+                        bricks.add(new Brick(iPosX, iPosY, 155, 55, this));
+                    }
                 }
             }
         }
@@ -232,8 +251,7 @@ public class Game implements Runnable {
             g = bs.getDrawGraphics();
             if (getGameState() == gameState.normal || getGameState() == gameState.pause) {
                 g.drawImage(Assets.background, 0, 0, width, height, null);
-                player.render(g);
-                ball.render(g);
+                player.render(g);                
                 for (int i = 0; i < bricks.size(); i++) {
                     Brick myBrick = bricks.get(i);
                     myBrick.render(g);
@@ -241,10 +259,15 @@ public class Game implements Runnable {
                 if (getGameState() == gameState.pause) {
                     g.drawImage(Assets.pause, 0, 0, getWidth(), getHeight(), null);
                 }
+                ball.render(g);
             }
             
             if (getGameState() == gameState.gameOver) {
                 g.drawImage(Assets.gameOver, 0, 0, getWidth(), getHeight(), null);
+            }
+            
+            if (getGameState() == gameState.victory) {
+                g.drawImage(Assets.victory, 0, 0, getWidth(), getHeight(), null);
             }
             bs.show();
             g.dispose();
