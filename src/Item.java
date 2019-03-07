@@ -9,7 +9,8 @@ import java.awt.Graphics;
 
 /**
  *
- * @author Hglez
+ * @author Humberto Gonzalez 
+ * @author Benjamin Valdez
  */
 public abstract class Item {
     protected int x; // to store x position

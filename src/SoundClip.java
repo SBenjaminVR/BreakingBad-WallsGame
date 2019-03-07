@@ -13,7 +13,8 @@ import java.io.IOException;
 import java.net.URL;
 /**
  *
- * @author Hglez
+ * @author Humberto Gonzalez 
+ * @author Benjamin Valdez
  */
 public class SoundClip {
 

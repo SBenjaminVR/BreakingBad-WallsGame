@@ -10,7 +10,8 @@ import java.io.IOException;
 
 /**
  *
- * @author Benjamin
+ * @author Humberto Gonzalez 
+ * @author Benjamin Valdez
  */
 public class WriteFile {
 
