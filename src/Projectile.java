@@ -11,7 +11,8 @@ import static java.lang.Math.cos;
 
 /**
  *
- * @author Hglez
+ * @author Humberto Gonzalez 
+ * @author Benjamin Valdez
  */
 
 public class Projectile extends Item {

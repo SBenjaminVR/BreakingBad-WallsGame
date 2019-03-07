@@ -12,7 +12,8 @@ import java.awt.image.BufferedImage;
 
 /**
  *
- * @author Benjamin
+ * @author Humberto Gonzalez 
+ * @author Benjamin Valdez
  */
 
 public class PowerUp extends Item {

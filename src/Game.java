@@ -19,7 +19,8 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Hglez
+ * @author Humberto Gonzalez 
+ * @author Benjamin Valdez
  */
 public class Game implements Runnable {
     
