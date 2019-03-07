@@ -250,9 +250,7 @@ public class Game implements Runnable {
             }
         }
         
-        if (keyManager.getSave()) {
-            save();
-        }
+        
         if (keyManager.getLoad()) {
             leeArchivo();
         }
@@ -262,6 +260,11 @@ public class Game implements Runnable {
                 setGameState(gameState.gameOver);
                 loseSound.play();
             }
+            
+            if (keyManager.getSave()) {
+                save();
+            }
+            
             if (bricks.isEmpty()) {
                 setGameState(gameState.victory);
             }
