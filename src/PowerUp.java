@@ -2,6 +2,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,34 +15,32 @@ import java.awt.Rectangle;
  * @author Benjamin
  */
 
-public class powerUp extends Item {
+public class PowerUp extends Item {
     
     private int width;
     private int height;
     private Game game;
-    private Rectangle xHitbox;
-    private Rectangle yHitbox;
-    private Animation powerAnimation; // to store the animation for being destroyed
-    public enum status { normal, hit, destroyed }
-    private status state;
-    private int lives;
-    private int bTimer;
-    private boolean animOver;
+    private Rectangle hitbox;
+    public enum Type { good, bad }
+    private Type type;
+    private BufferedImage sprite;
+    private int fallSpeed;
     
-    public powerUp(int x, int y, int width, int height, Game game) {
+    public PowerUp(int x, int y, int width, int height, Type type, Game game) {
         super(x, y);
         this.width = width;
         this.height = height;
         this.game = game;
-        this.xHitbox = new Rectangle(x, y+15, width-13, height-20);
-        this.yHitbox = new Rectangle(x + 10, y+8, width-28, height-8);
-        this.powerAnimation = new Animation(Assets.powerAnimation, 100);
-        this.state = status.normal;
-        this.lives = 2;
-        this.bTimer = 0;
-        this.animOver = false;
-    }
-    
+        this.hitbox = new Rectangle(x, y, width, height);        
+        this.type = type;
+        if (type == Type.good) {
+            this.sprite = Assets.goodPwrUp;
+        }
+        else if (type == Type.bad) {
+            this.sprite = Assets.badPwrUp;
+        }
+        this.fallSpeed = 5;
+    }    
      
     public int getWidth() {
         return width;
@@ -59,49 +58,47 @@ public class powerUp extends Item {
         this.height = height;
     }
 
-    public status getState() {
-        return state;
-    }
-
-    public void setState(status state) {
-        this.state = state;
-    } 
-
-    public Rectangle getxHitbox() {
-        return xHitbox;
-    }
-
-    public Rectangle getyHitbox() {
-        return yHitbox;
-    }
-
-    public boolean isAnimOver() {
-        return animOver;
+    public Type getType() {
+        return type;
     }
     
-    
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getFallSpeed() {
+        return fallSpeed;
+    }
+
+    public Rectangle getHitbox() {
+        return hitbox;
+    }    
     
     @Override
     public void tick() {
-        if (getState() == status.destroyed) {
-            powerAnimation.tick();
-            if (powerAnimation.getIndex() == 5) {
-                animOver = true;
-            }
-        }
+        getHitbox().setLocation(getX(), getY());
+        setY(getY() + getFallSpeed());
     }
     
     @Override
     public void render(Graphics g) {
-       if (getState() == status.normal) {
-            g.drawImage(Assets.powerUp, getX(), getY(), getWidth(), getHeight(), null);
-       }
-       if (getState() == status.hit) {
-            g.drawImage(Assets.damagedPowerUp, getX(), getY(), getWidth(), getHeight(), null);
-       }
-       if (getState() == status.destroyed) {
-           g.drawImage(powerAnimation.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
-       }
-       
+        g.drawImage(sprite, getX(), getY(), getWidth(), getHeight(), null);
     }
+    
 }

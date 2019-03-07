@@ -32,6 +32,7 @@ public class Brick extends Item {
     private int dropProb; // variable to check if brick can drop powerup
     private int goodDropChance; // Chance to drop good powerup
     private int badDropChance; // Chance to drop bad powerup
+    private boolean alreadyDropped;
     
     public Brick(int x, int y, int width, int height, Game game) {
         super(x, y);
@@ -49,6 +50,7 @@ public class Brick extends Item {
         this.dropProb = (int) (Math.random() * 100); // random number from 0 to 100
         this.goodDropChance = 10; // if dropProb is <= goodDropChance drop it
         this.badDropChance = 90; // if dropProb is >= badDropChance drop it
+        this.alreadyDropped = false;
     }
     
      
@@ -98,6 +100,14 @@ public class Brick extends Item {
 
     public int getGoodDropChance() {
         return goodDropChance;
+    }
+
+    public boolean isAlreadyDropped() {
+        return alreadyDropped;
+    }
+
+    public void setAlreadyDropped(boolean alreadyDropped) {
+        this.alreadyDropped = alreadyDropped;
     }    
         
     @Override

@@ -43,6 +43,7 @@ public class Game implements Runnable {
     private long tiempoActual; //tiempo de la animacion 
     private String[] arr;
     private LinkedList<PowerUp> drops;
+    private int powerTimer;
     
     /**
      * to create title, width and height and set the game is still not running
@@ -59,6 +60,8 @@ public class Game implements Runnable {
         this.gameState = gameState.normal;
         bricks = new LinkedList<Brick>();
         brickTimer = 0;
+        drops = new LinkedList<PowerUp>();
+        powerTimer = 0;
     }
 
     public int getWidth() {
@@ -227,10 +230,38 @@ public class Game implements Runnable {
             
             // advancing player with collision
             player.tick();
+            // Returning the player to normal size when timer is done
+            if (powerTimer <= 0) {
+                resizeBar(226);
+            }
+            else {
+                powerTimer--;
+            }
+            // ticking the ball
             ball.tick();
+            // ticking bricks
             for (int i = 0; i < bricks.size(); i++) {
                 Brick myBrick = bricks.get(i);
                 myBrick.tick();
+            }
+            // ticking powerUps
+            for (int i = 0; i < drops.size(); i++) {
+                PowerUp myPower = drops.get(i);
+                myPower.tick();
+                // Delete from game if power up isnt caught by player
+                if (myPower.getY() >= getHeight()) {
+                    drops.remove(i);
+                }
+                if (myPower.getHitbox().intersects(getPlayer().getHitbox())) {
+                    if (myPower.getType() == PowerUp.Type.good) {
+                        resizeBar(226 * 2);
+                        drops.remove(i);                        
+                    }
+                    else if (myPower.getType() == PowerUp.Type.bad) {
+                        resizeBar(226 / 2);
+                        drops.remove(i);
+                    }
+                }
             }
             
             for(int j = 0; j < bricks.size(); j++){
@@ -239,25 +270,25 @@ public class Game implements Runnable {
                 boolean Intersects = ball.intersecta(myBrick);
 //                boolean xIntersects = ball.getHitbox().intersects(myBrick.getxHitbox());
 
-                if(Intersects && brickTimer <= 0){
+                if(myBrick.getState() != Brick.status.destroyed && Intersects && brickTimer <= 0){
 //                        player.setScore(player.getScore() + 5);
                     if (myBrick.getState() == Brick.status.normal) myBrick.setState(Brick.status.hit);
                     else if (myBrick.getState() == Brick.status.hit) myBrick.setState(Brick.status.destroyed);
                     Intersects = false;
-
                     brickTimer = 10;
-
                     ball.setYSpeed(ball.getYSpeed() * -1);
                     ball.setXSpeed(ball.getXSpeed() * -1);
                 }
                 
                 if (myBrick.getState() == Brick.status.destroyed) {
                     
-                    if (myBrick.getDropProb() <= myBrick.getGoodDropChance()) {
-                        
+                    if (!myBrick.isAlreadyDropped() && myBrick.getDropProb() <= myBrick.getGoodDropChance()) {
+                        drops.add(new PowerUp(myBrick.getX() + myBrick.getWidth() / 2 - 25, myBrick.getY(), 50, 50, PowerUp.Type.good, this));
+                        myBrick.setAlreadyDropped(true);
                     }
-                    else if (myBrick.getDropProb() >= myBrick.getGoodDropChance()) {
-
+                    else if (!myBrick.isAlreadyDropped() && myBrick.getDropProb() >= myBrick.getBadDropChance()) {
+                        drops.add(new PowerUp(myBrick.getX() + myBrick.getWidth() / 2 - 25, myBrick.getY(), 50, 50, PowerUp.Type.bad, this));
+                        myBrick.setAlreadyDropped(true);
                     }
                     if (myBrick.isAnimOver())   bricks.remove(j);
                 }
@@ -283,6 +314,9 @@ public class Game implements Runnable {
              for (int i = 0; i < bricks.size(); i++) {
                  bricks.remove(i);
              }
+             for (int i = 0; i < drops.size(); i++) {
+                 drops.remove(i);
+             }
             if (keyManager.enter) {
                 setGameState(gameState.normal);
                 keyManager.setStart(false);
@@ -297,6 +331,12 @@ public class Game implements Runnable {
                 }
             }
         }
+    }
+    
+    private void resizeBar(int width) {
+        getPlayer().setWidth(width);
+        getPlayer().getHitbox().setSize(width, getPlayer().getHeight());
+        powerTimer = 300;
     }
     
     private void render() {
@@ -315,15 +355,20 @@ public class Game implements Runnable {
             g = bs.getDrawGraphics();
             if (getGameState() == gameState.normal || getGameState() == gameState.pause) {
                 g.drawImage(Assets.background, 0, 0, width, height, null);
-                player.render(g);                
+                player.render(g);   
+                ball.render(g);
                 for (int i = 0; i < bricks.size(); i++) {
                     Brick myBrick = bricks.get(i);
                     myBrick.render(g);
                 }
+                for (int i = 0; i < drops.size(); i++) {
+                    PowerUp myPower = drops.get(i);
+                    myPower.render(g);
+                }
                 if (getGameState() == gameState.pause) {
                     g.drawImage(Assets.pause, 0, 0, getWidth(), getHeight(), null);
                 }
-                ball.render(g);
+                
             }
             
             if (getGameState() == gameState.gameOver) {

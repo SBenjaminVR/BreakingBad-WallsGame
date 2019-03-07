@@ -20,9 +20,6 @@ public class Assets {
     public static BufferedImage damagedBrick;  
     public static BufferedImage grenadeSprites;
     public static BufferedImage powerUp;
-    public static BufferedImage destroyedPowerUp;
-    public static BufferedImage damagedPowerUp;
-    public static BufferedImage powerAnimation[];
     public static BufferedImage grenade[];
     public static BufferedImage gameOver; // to store game over image
     public static BufferedImage pause; //to store the pause image
@@ -48,8 +45,7 @@ public class Assets {
         victory = ImageLoader.loadImage("/images/victoryScreen.jpg");
 
         pause = ImageLoader.loadImage("/images/Pausa.png"); 
-        powerUp = ImageLoader.loadImage("/images/powerSprite.png"); 
-        damagedPowerUp = ImageLoader.loadImage("/images/damagedPowerSprite.png");
+        powerUp = ImageLoader.loadImage("/images/br.png"); 
         
         barSprites = ImageLoader.loadImage("/images/BarritaSprite.png");
         SpreadSheet barSpritesheet = new SpreadSheet(barSprites);         
@@ -68,23 +64,13 @@ public class Assets {
         hitSound = new SoundClip("/sounds/hit.wav");
         bounceSound = new SoundClip("/sounds/bounce.wav");
         
-        goodPwrUp = ImageLoader.loadImage("/images/");
+        goodPwrUp = ImageLoader.loadImage("/images/br.png");
+        badPwrUp = ImageLoader.loadImage("/images/brMalo.png");
         // cropping the pictures from the sheet into the array
         int count = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 6; j++) {
                 playerBar[count] = barSpritesheet.crop(i * 226, j * 50, 226, 50);
-                count++;
-            }
-        }
-        
-        destroyedPowerUp= ImageLoader.loadImage("/images/AnimationPowerSprite.png");
-        SpreadSheet powerSpritesheet = new SpreadSheet(destroyedPowerUp);
-        powerAnimation = new BufferedImage[6];
-        count = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 2; j++) {
-                powerAnimation[count] = powerSpritesheet.crop(i * 155, j * 55, 155, 55);
                 count++;
             }
         }
