@@ -27,12 +27,12 @@ public class Player extends Item {
     
     /**
      * Constructor with parameters
-     * @param x
-     * @param y
-     * @param direction
-     * @param width
-     * @param height
-     * @param game 
+     * @param x position
+     * @param y position
+     * @param direction of the player
+     * @param width of the player
+     * @param height of the player
+     * @param game where the player exists
      */
     public Player(int x, int y, int direction, int width, int height, Game game) {
         super(x, y);
@@ -47,70 +47,70 @@ public class Player extends Item {
     }
      /**
       * Returns the width of the player
-      * @return 
+      * @return int value of the player's width
       */
     public int getWidth() {
         return width;
     }
     /**
      * Returns the height of the player
-     * @return 
+     * @return int value of the player's height
      */
     public int getHeight() {
         return height;
     }
     /**
      * Sets the direction of the player
-     * @param direction 
+     * @param direction of the player
      */
     public void setDirection(int direction) {
         this.direction = direction;
     }
     /**
      * Sets the width of the player
-     * @param width 
+     * @param width of the player
      */
     public void setWidth(int width) {
         this.width = width;
     }
     /**
      * Sets the height of the player
-     * @param height 
+     * @param height of the player
      */
     public void setHeight(int height) {
         this.height = height;
     }
     /**
      * Returns the speed of the player
-     * @return 
+     * @return int value of the speed
      */
     public int getSpeed() {
         return speed;
     }
     /**
      * Sets the speed of the player
-     * @param speed 
+     * @param speed of the player
      */
     public void setSpeed(int speed) {
         this.speed = speed;
     }
     /**
      * Returns the player's hitbox
-     * @return 
+     * @return Rectangle hitbox
      */
     public Rectangle getHitbox() {
         return hitbox;
     }
     /**
      * Returns the player's current state
-     * @return 
+     * @return playerState 
      */
     public playerState getState() {
         return state;
     }
     /**
      * Sets the player state
-     * @param state 
+     * @param state is the new state of the player
      */
     public void setState(playerState state) {
         this.state = state;
@@ -156,7 +156,7 @@ public class Player extends Item {
     
     /**
      * Function render that draws the player
-     * @param g 
+     * @param g for the graphics
      */    
     @Override
     public void render(Graphics g) {
