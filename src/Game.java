@@ -155,13 +155,19 @@ public class Game implements Runnable {
             saveFile = new WriteFile("save.txt", false);
             saveFile.writeToFile(String.valueOf(player.getX()));
             saveFile.setAppend(true);
-            saveFile.writeToFile(String.valueOf(player.getY()));
-
-            /*
-            g.setFont(new Font("Arial", Font.PLAIN, 40));
-            g.setColor(Color.white);
-            g.drawString("Juego guardado", 500, 500);
-            */
+            saveFile.writeToFile(String.valueOf(bricks.size()));
+            //Guarda los bloques en el juego 
+            for (int i = 0; i < bricks.size(); i++) {
+                Brick myBrick = bricks.get(i);
+                saveFile.writeToFile(String.valueOf(myBrick.getX()));
+                saveFile.writeToFile(String.valueOf(myBrick.getY()));
+                saveFile.writeToFile(String.valueOf(myBrick.getState()));
+            }
+            //Guarda valores de la bola
+            saveFile.writeToFile(String.valueOf(ball.getX()));
+            saveFile.writeToFile(String.valueOf(ball.getY()));
+            saveFile.writeToFile(String.valueOf(ball.getXSpeed()));
+            saveFile.writeToFile(String.valueOf(ball.getYSpeed()));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -179,22 +185,54 @@ public class Game implements Runnable {
             fileIn = new BufferedReader(new FileReader("save.txt"));
         }
         String dato = fileIn.readLine();
-        int contador = 0;
+        
+        int num = (Integer.parseInt(dato));
+        int iPosX, iPosY;
+        player.setX(num);
+        
+        int numBlocks = Integer.parseInt(fileIn.readLine());
+        bricks.clear();
+        for (int i = 0; i < numBlocks; i++) {
+             iPosX = Integer.parseInt(fileIn.readLine());
+             iPosY = Integer.parseInt(fileIn.readLine());
+            bricks.add(new Brick(iPosX, iPosY, 155, 55, this));
+            
+            Brick myBrick = bricks.get(i);
+            String actualState = fileIn.readLine();
+            
+            if ("normal".equals(actualState)) {
+             myBrick.setState(Brick.status.normal);    
+            }
+            if ("hit".equals(actualState)) {
+             myBrick.setState(Brick.status.hit);    
+            }
+            if ("destroyed ".equals(actualState)) {
+             myBrick.setState(Brick.status.destroyed);    
+            }
+        }
+        
+        iPosX = Integer.parseInt(fileIn.readLine());
+        iPosY = Integer.parseInt(fileIn.readLine());
+        
+        ball.setX(iPosX);
+        ball.setY(iPosY);
+        
+        double speedX = Double.parseDouble(fileIn.readLine());
+        double speedY = Double.parseDouble(fileIn.readLine());
+        
+        ball.setXSpeed(speedX);
+        ball.setYSpeed(speedY);
+        
+        dato = fileIn.readLine();
         while (dato != null) {
 
             arr = dato.split(",");
            // player.setX(arr);
-            int num = (Integer.parseInt(dato));
-            if (contador == 0) {
-            player.setX(num);
-            }
-            else {
-                player.setY(num);
-            }
+            num = (Integer.parseInt(dato));
+            
             //String nom = arr[1];
             //vec.add(new Puntaje(nom, num));
             dato = fileIn.readLine();
-            contador++;
         }
         fileIn.close();
     }

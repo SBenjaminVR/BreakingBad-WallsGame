@@ -45,7 +45,6 @@ public class Assets {
         victory = ImageLoader.loadImage("/images/victoryScreen.jpg");
 
         pause = ImageLoader.loadImage("/images/Pausa.png"); 
-        powerUp = ImageLoader.loadImage("/images/br.png"); 
         
         barSprites = ImageLoader.loadImage("/images/BarritaSprite.png");
         SpreadSheet barSpritesheet = new SpreadSheet(barSprites);         
