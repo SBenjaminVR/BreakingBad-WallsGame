@@ -30,12 +30,12 @@ public class PowerUp extends Item {
     
     /**
      * Constructor with parameters for power Ups
-     * @param x 
-     * @param y
-     * @param width
-     * @param height
-     * @param type
-     * @param game 
+     * @param x position
+     * @param y position
+     * @param width of the power up
+     * @param height of the power up
+     * @param type of the power up
+     * @param game where the power up exists
      */
     public PowerUp(int x, int y, int width, int height, Type type, Game game) {
         super(x, y);
@@ -55,84 +55,84 @@ public class PowerUp extends Item {
     
     /**
      * Returns the width of the power up
-     * @return 
+     * @return the int value of the power up's widht
      */
     public int getWidth() {
         return width;
     }
     /**
      * Returns the height of the power up
-     * @return 
+     * @return int value of the power up's height
      */
     public int getHeight() {
         return height;
     }
     /**
      * Sets the width of the power up
-     * @param width 
+     * @param width of the power up
      */
     public void setWidth(int width) {
         this.width = width;
     }
     /**
      * Sets height of the power up
-     * @param height 
+     * @param height of the power up
      */
     public void setHeight(int height) {
         this.height = height;
     }
     /**
      * Returns the type of the power up
-     * @return 
+     * @return Type of the power up
      */
     public Type getType() {
         return type;
     }
     /**
      * Set the type of the power up
-     * @param type 
+     * @param type of the power up
      */
     public void setType(Type type) {
         this.type = type;
     }
     /**
      * Returns the x position of the power up
-     * @return 
+     * @return the x position of the power up
      */
     public int getX() {
         return x;
     }
     /**
      * Returns the y position of the power up
-     * @return 
+     * @return the y position of the power up
      */
     public int getY() {
         return y;
     }
     /**
      * Sets the x position of the power up
-     * @param x 
+     * @param x position
      */
     public void setX(int x) {
         this.x = x;
     }
     /**
      * Sets the y position of the power up
-     * @param y 
+     * @param y position
      */
     public void setY(int y) {
         this.y = y;
     }
     /**
      * Returns the speed at which the power up falls
-     * @return 
+     * @return int value for the speed of the power up
      */
     public int getFallSpeed() {
         return fallSpeed;
     }
     /**
      * Returns the hitbox of the power up
-     * @return 
+     * @return Rectangle hitbox
      */
     public Rectangle getHitbox() {
         return hitbox;
@@ -143,12 +143,14 @@ public class PowerUp extends Item {
      */
     @Override
     public void tick() {
+        // Refreshes the location of the hitbox
         getHitbox().setLocation(getX(), getY());
+        // Makes the power up fall
         setY(getY() + getFallSpeed());
     }
     /**
      * Function render that draws the sprite of the power up
-     * @param g 
+     * @param g for the graphics
      */
     @Override
     public void render(Graphics g) {
