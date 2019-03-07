@@ -34,17 +34,17 @@ public class Game implements Runnable {
     private boolean running; //to set the game
     private Player player; // to use a player
     private LinkedList<Brick> bricks ;// to use the bricks 
-    private Projectile ball;
+    private Projectile ball; //to use the projectile
     private KeyManager keyManager; // to manage the keyboard
-    private WriteFile saveFile;
+    private WriteFile saveFile; //to store the saveFile
     private enum gameState { normal, gameOver, pause, victory }
-    private gameState gameState;
-    private int brickTimer;
-    private SoundClip loseSound;
+    private gameState gameState; //to have the gameStates
+    private int brickTimer; //invulnerability frames for bricks
+    private SoundClip loseSound; //Sound if the player losses
     private long tiempoActual; //tiempo de la animacion 
-    private String[] arr;
-    private LinkedList<PowerUp> drops;
-    private int powerTimer;
+    private String[] arr; //aux for the reading file
+    private LinkedList<PowerUp> drops; //PowerUps Drops
+    private int powerTimer; //timer for the powerUps Drops
     
     /**
      * to create title, width and height and set the game is still not running
@@ -65,32 +65,56 @@ public class Game implements Runnable {
         powerTimer = 0;
     }
 
+    /**
+     * Gets the Width of the Screen of the game 
+     * @return Width of the Screen of the game 
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Gets the Height of the Screen of the game 
+     * @return Height of the Screen of the game 
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Gets the bar that is the player of the game
+     * @return the bar object for the player 
+     */
     public Player getPlayer() {
         return player;
     }
     
+    /**
+     * Gets the projectile that is used in the game
+     * @return the projectile object
+     */
     public Projectile getBall() {
         return ball;
     }
 
+    /**
+     * Gets the actual game state of the game
+     * @return the actual game state of the game
+     */
     public gameState getGameState() {
         return gameState;
     }
 
+    /**
+     * Changes the state of the game
+     * @param gameState  that is the new state of the game
+     */
     public void setGameState(gameState gameState) {
         this.gameState = gameState;
     }
         
     /**
-     * initializing the display window of the game
+     * Initializing the display window of the game
      */
     private void init() {
         display = new Display(title, width, height);
@@ -112,6 +136,10 @@ public class Game implements Runnable {
         display.getJframe().addKeyListener(keyManager);
     }
     
+    /**
+     * Gets the KeyManager that handles the Keyboard
+     * @return the KeyManager that handles the Keyboard
+     */
     public KeyManager getKeyManager() {
         return keyManager;
     }
@@ -151,6 +179,9 @@ public class Game implements Runnable {
         stop();
     }
     
+    /**
+     * Saves the game in "save.txt" that can bea loaded later
+     */
     private void save() {
         try {
             saveFile = new WriteFile("save.txt", false);
@@ -174,6 +205,10 @@ public class Game implements Runnable {
         }
     }
     
+    /**
+     * Loads a game if it has a save file;
+     * @throws IOException 
+     */
     public void leeArchivo() throws IOException {
         BufferedReader fileIn;
         try {
@@ -238,20 +273,26 @@ public class Game implements Runnable {
         fileIn.close();
     }
     
+    /**
+     * Ticks every time to have the game moving
+     * @throws IOException 
+     */
     private void tick() throws IOException {
         brickTimer--;
         keyManager.tick();
+        //Pauses the game if the player presses 'P'
         if (keyManager.getPause() && getGameState() == gameState.normal) {
                 setGameState(gameState.pause);
             
         }
         else {
+            //Unpauses the game if the game is already paused
             if (keyManager.getPause() && getGameState() == gameState.pause) {
                 setGameState(gameState.normal);
             }
         }
         
-        
+        //Loads a savefile
         if (keyManager.getLoad()) {
             leeArchivo();
         }
@@ -262,6 +303,7 @@ public class Game implements Runnable {
                 loseSound.play();
             }
             
+            //Saves the game if the player presses "G"
             if (keyManager.getSave()) {
                 save();
             }
@@ -305,15 +347,13 @@ public class Game implements Runnable {
                     }
                 }
             }
-            
+            //Checks if there's a collison with the bricks
             for(int j = 0; j < bricks.size(); j++){
                 Brick myBrick = bricks.get(j);
 
                 boolean Intersects = ball.intersecta(myBrick);
-//                boolean xIntersects = ball.getHitbox().intersects(myBrick.getxHitbox());
 
                 if(myBrick.getState() != Brick.status.destroyed && Intersects && brickTimer <= 0){
-//                        player.setScore(player.getScore() + 5);
                     if (myBrick.getState() == Brick.status.normal) myBrick.setState(Brick.status.hit);
                     else if (myBrick.getState() == Brick.status.hit) myBrick.setState(Brick.status.destroyed);
                     Intersects = false;
@@ -336,6 +376,7 @@ public class Game implements Runnable {
                 }
             }
         }
+        //Stops everything if the player wins 
         if (getGameState() == gameState.victory) {
             if (keyManager.enter) {
                 setGameState(gameState.normal);
@@ -352,6 +393,7 @@ public class Game implements Runnable {
             }
         }
 
+        //stops everything until the player presses "enter" if the loses
         if (getGameState() == gameState.gameOver) {
              for (int i = 0; i < bricks.size(); i++) {
                  bricks.remove(i);
@@ -375,12 +417,19 @@ public class Game implements Runnable {
         }
     }
     
+    /**
+     * Changes the size of the bar
+     * @param width is the new size of the bar
+     */
     private void resizeBar(int width) {
         getPlayer().setWidth(width);
         getPlayer().getHitbox().setSize(width, getPlayer().getHeight());
         powerTimer = 300;
     }
     
+    /**
+     * Prints the graphics on the screen 
+     */
     private void render() {
         //get the buffer strategy from the display
         bs = display.getCanvas().getBufferStrategy();
@@ -399,24 +448,29 @@ public class Game implements Runnable {
                 g.drawImage(Assets.background, 0, 0, width, height, null);
                 player.render(g);   
                 ball.render(g);
+                //Prints the bricks in the screen
                 for (int i = 0; i < bricks.size(); i++) {
                     Brick myBrick = bricks.get(i);
                     myBrick.render(g);
                 }
+                //Prints the powerUps if there's any
                 for (int i = 0; i < drops.size(); i++) {
                     PowerUp myPower = drops.get(i);
                     myPower.render(g);
                 }
+                //Prints the pause screen
                 if (getGameState() == gameState.pause) {
                     g.drawImage(Assets.pause, 0, 0, getWidth(), getHeight(), null);
                 }
                 
             }
             
+            //Prints the gameover screen if the player lost
             if (getGameState() == gameState.gameOver) {
                 g.drawImage(Assets.gameOver, 0, 0, getWidth(), getHeight(), null);
             }
             
+            //Prints the victory screen if the player won
             if (getGameState() == gameState.victory) {
                 g.drawImage(Assets.victory, 0, 0, getWidth(), getHeight(), null);
             }
